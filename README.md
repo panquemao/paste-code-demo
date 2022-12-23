@@ -17,40 +17,7 @@ Just only write `!<LANGUAGE>` at the beginning of the text. For example, if you 
 The supported languages are as follows in this file: [languages](./languages.md)
 
 ```
-Markup - markup, html, xml, svg, mathml, ssml, atom, rss
-CSS - css
-C-like - clike
-JavaScript - javascript, js
-ABAP - abap
-ABNF - abnf
-ActionScript - actionscript
-Ada - ada
-Agda - agda
-AL - al
-ANTLR4 - antlr4, g4
-Apache Configuration - apacheconf
-Apex - apex
-APL - apl
-AppleScript - applescript
-AQL - aql
-Arduino - arduino, ino
-ARFF - arff
-ARM Assembly - armasm, arm-asm
-Arturo - arturo, art
-AsciiDoc - asciidoc, adoc
-ASP.NET (C#) - aspnet
-6502 Assembly - asm6502
-Atmel AVR Assembly - asmatmel
-AutoHotkey - autohotkey
-AutoIt - autoit
-AviSynth - avisynth, avs
-Avro IDL - avro-idl, avdl
-AWK - awk, gawk
-Bash - bash, sh, shell
-BASIC - basic
-Batch - batch
-BBcode - bbcode, shortcode
-BBj - bbj
+
 Bicep - bicep
 Birb - birb
 Bison - bison
@@ -316,10 +283,24 @@ YANG - yang
 Zig - zig
 ```
 
-| Language | !lang | Language  | !lang  |
-|----------|-------|-----------|--------|
-| CSS      | !CSS  | C-LIKE    | !CLIKE |
-| C        | !C    | C++       | !CPP   |
+| Language  | !lang   | Language| !lang | Language | !lang  |
+|-----------|---------|---------|-------|----------|--------|
+| HTML      | !HTML   | XML     | !XML  | SVG      | !SVG   |
+| MathML    | !MATHML | SSML    | !SSML | Atom     | !ATOM  |
+| CSS       | !CSS    | C-like  | !CLIKE|JavaScript| !JS  !JAVASCRIPT |
+| ABAP      | !ABAP   | ABNF    | !ABNF | ActionScript| !ACTIONSCRIPT |
+| Ada       | !ADA    | Agda    | !AGDA | AL       | !AL    |
+| ANTLR4    | !ANTLR4 !G4 | Apache Configuration| !APACHECONF | Apex| !APEX |
+| APL       | !APL    | AppleScript| !APPLESCRIPT | AQL| !AQL |
+| Arduino   | !ARDUINO !INO | ARFF  | !ARFF | ARM Assembly| !ARMAASM !ARM-ASM |
+| Arturo    | !ARTURO !ART | AsciiDoc| !ASCIIDOC !ADOC | ASP.NET (C#)| !ASPNET |
+| 6502 Assembly| !ASM6502 | Atmel AVR Assembly| !ASMATMEL | AutoHotkey| !AUTOHOTKEY |   
+| AutoIt    | !AUTOIT | AviSynth| !AVISYNTH !AVS | Avro IDL| !AVRO-IDL !AVDL |
+| AWK       | !AWK !GAWK | Bash  | !BASH !SH !SHELL | BASIC  | !BASIC |
+| Batch     | !BATCH  | BBcode | !BBCODE !SHORTCODE | BBj    | !BBJ |
+
+
+
 
 
 ## What can I do with it?
