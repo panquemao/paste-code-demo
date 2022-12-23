@@ -16,272 +16,7 @@ Just only write `!<LANGUAGE>` at the beginning of the text. For example, if you 
 
 The supported languages are as follows in this file: [languages](./languages.md)
 
-```
 
-Bicep - bicep
-Birb - birb
-Bison - bison
-BNF - bnf, rbnf
-BQN - bqn
-Brainfuck - brainfuck
-BrightScript - brightscript
-Bro - bro
-BSL (1C:Enterprise) - bsl, oscript
-C - c
-C# - csharp, cs, dotnet
-C++ - cpp
-CFScript - cfscript, cfc
-ChaiScript - chaiscript
-CIL - cil
-Cilk/C - cilkc, cilk-c
-Cilk/C++ - cilkcpp, cilk-cpp, cilk
-Clojure - clojure
-CMake - cmake
-COBOL - cobol
-CoffeeScript - coffeescript, coffee
-Concurnas - concurnas, conc
-Content-Security-Policy - csp
-Cooklang - cooklang
-Coq - coq
-Crystal - crystal
-CSS Extras - css-extras
-CSV - csv
-CUE - cue
-Cypher - cypher
-D - d
-Dart - dart
-DataWeave - dataweave
-DAX - dax
-Dhall - dhall
-Diff - diff
-Django/Jinja2 - django, jinja2
-DNS zone file - dns-zone-file, dns-zone
-Docker - docker, dockerfile
-DOT (Graphviz) - dot, gv
-EBNF - ebnf
-EditorConfig - editorconfig
-Eiffel - eiffel
-EJS - ejs, eta
-Elixir - elixir
-Elm - elm
-Embedded Lua templating - etlua
-ERB - erb
-Erlang - erlang
-Excel Formula - excel-formula, xlsx, xls
-F# - fsharp
-Factor - factor
-False - false
-Firestore security rules - firestore-security-rules
-Flow - flow
-Fortran - fortran
-FreeMarker Template Language - ftl
-GameMaker Language - gml, gamemakerlanguage
-GAP (CAS) - gap
-G-code - gcode
-GDScript - gdscript
-GEDCOM - gedcom
-gettext - gettext, po
-Gherkin - gherkin
-Git - git
-GLSL - glsl
-GN - gn, gni
-GNU Linker Script - linker-script, ld
-Go - go
-Go module - go-module, go-mod
-Gradle - gradle
-GraphQL - graphql
-Groovy - groovy
-Haml - haml
-Handlebars - handlebars, hbs, mustache
-Haskell - haskell, hs
-Haxe - haxe
-HCL - hcl
-HLSL - hlsl
-Hoon - hoon
-HTTP - http
-HTTP Public-Key-Pins - hpkp
-HTTP Strict-Transport-Security - hsts
-IchigoJam - ichigojam
-Icon - icon
-ICU Message Format - icu-message-format
-Idris - idris, idr
-.ignore - ignore, gitignore, hgignore, npmignore
-Inform 7 - inform7
-Ini - ini
-Io - io
-J - j
-Java - java
-JavaDoc - javadoc
-JavaDoc-like - javadoclike
-Java stack trace - javastacktrace
-Jexl - jexl
-Jolie - jolie
-JQ - jq
-JSDoc - jsdoc
-JS Extras - js-extras
-JSON - json, webmanifest
-JSON5 - json5
-JSONP - jsonp
-JS stack trace - jsstacktrace
-JS Templates - js-templates
-Julia - julia
-Keepalived Configure - keepalived
-Keyman - keyman
-Kotlin - kotlin, kt, kts
-KuMir (КуМир) - kumir, kum
-Kusto - kusto
-LaTeX - latex, tex, context
-Latte - latte
-Less - less
-LilyPond - lilypond, ly
-Liquid - liquid
-Lisp - lisp, emacs, elisp, emacs-lisp
-LiveScript - livescript
-LLVM IR - llvm
-Log file - log
-LOLCODE - lolcode
-Lua - lua
-Magma (CAS) - magma
-Makefile - makefile
-Markdown - markdown, md
-Markup templating - markup-templating
-Mata - mata
-MATLAB - matlab
-MAXScript - maxscript
-MEL - mel
-Mermaid - mermaid
-METAFONT - metafont
-Mizar - mizar
-MongoDB - mongodb
-Monkey - monkey
-MoonScript - moonscript, moon
-N1QL - n1ql
-N4JS - n4js, n4jsd
-Nand To Tetris HDL - nand2tetris-hdl
-Naninovel Script - naniscript, nani
-NASM - nasm
-NEON - neon
-Nevod - nevod
-nginx - nginx
-Nim - nim
-Nix - nix
-NSIS - nsis
-Objective-C - objectivec, objc
-OCaml - ocaml
-Odin - odin
-OpenCL - opencl
-OpenQasm - openqasm, qasm
-Oz - oz
-PARI/GP - parigp
-Parser - parser
-Pascal - pascal, objectpascal
-Pascaligo - pascaligo
-PATROL Scripting Language - psl
-PC-Axis - pcaxis, px
-PeopleCode - peoplecode, pcode
-Perl - perl
-PHP - php
-PHPDoc - phpdoc
-PHP Extras - php-extras
-PlantUML - plant-uml, plantuml
-PL/SQL - plsql
-PowerQuery - powerquery, pq, mscript
-PowerShell - powershell
-Processing - processing
-Prolog - prolog
-PromQL - promql
-.properties - properties
-Protocol Buffers - protobuf
-Pug - pug
-Puppet - puppet
-Pure - pure
-PureBasic - purebasic, pbfasm
-PureScript - purescript, purs
-Python - python, py
-Q# - qsharp, qs
-Q (kdb+ database) - q
-QML - qml
-Qore - qore
-R - r
-Racket - racket, rkt
-Razor C# - cshtml, razor
-React JSX - jsx
-React TSX - tsx
-Reason - reason
-Regex - regex
-Rego - rego
-Ren'py - renpy, rpy
-ReScript - rescript, res
-reST (reStructuredText) - rest
-Rip - rip
-Roboconf - roboconf
-Robot Framework - robotframework, robot
-Ruby - ruby, rb
-Rust - rust
-SAS - sas
-Sass (Sass) - sass
-Sass (SCSS) - scss
-Scala - scala
-Scheme - scheme
-Shell session - shell-session, sh-session, shellsession
-Smali - smali
-Smalltalk - smalltalk
-Smarty - smarty
-SML - sml, smlnj
-Solidity (Ethereum) - solidity, sol
-Solution file - solution-file, sln
-Soy (Closure Template) - soy
-SPARQL - sparql, rq
-Splunk SPL - splunk-spl
-SQF: Status Quo Function (Arma 3) - sqf
-SQL - sql
-Squirrel - squirrel
-Stan - stan
-Stata Ado - stata
-Structured Text (IEC 61131-3) - iecst
-Stylus - stylus
-SuperCollider - supercollider, sclang
-Swift - swift
-Systemd configuration file - systemd
-T4 templating - t4-templating
-T4 Text Templates (C#) - t4-cs, t4
-T4 Text Templates (VB) - t4-vb
-TAP - tap
-Tcl - tcl
-Template Toolkit 2 - tt2
-Textile - textile
-TOML - toml
-Tremor - tremor, trickle, troy
-Turtle - turtle, trig
-Twig - twig
-TypeScript - typescript, ts
-TypoScript - typoscript, tsconfig
-UnrealScript - unrealscript, uscript, uc
-UO Razor Script - uorazor
-URI - uri, url
-V - v
-Vala - vala
-VB.Net - vbnet
-Velocity - velocity
-Verilog - verilog
-VHDL - vhdl
-vim - vim
-Visual Basic - visual-basic, vb, vba
-WarpScript - warpscript
-WebAssembly - wasm
-Web IDL - web-idl, webidl
-WGSL - wgsl
-Wiki markup - wiki
-Wolfram language - wolfram, mathematica, nb, wl
-Wren - wren
-Xeora - xeora, xeoracube
-XML doc (.net) - xml-doc
-Xojo (REALbasic) - xojo
-XQuery - xquery
-YAML - yaml, yml
-YANG - yang
-Zig - zig
-```
 
 | Language  | !lang   | Language| !lang | Language | !lang  |
 |-----------|---------|---------|-------|----------|--------|
@@ -298,8 +33,95 @@ Zig - zig
 | AutoIt    | !AUTOIT | AviSynth| !AVISYNTH !AVS | Avro IDL| !AVRO-IDL !AVDL |
 | AWK       | !AWK !GAWK | Bash  | !BASH !SH !SHELL | BASIC  | !BASIC |
 | Batch     | !BATCH  | BBcode | !BBCODE !SHORTCODE | BBj    | !BBJ |
-
-
+| Bicep     | !BICEP  | Birb   | !BIRB | Bison    | !BISON |
+| BNF       | !BNF !RBNF | BQN    | !BQN | Brainfuck| !BRAINFUCK |
+| BrightScript| !BRIGHTSCRIPT | Bro  | !BRO | BSL (1C:Enterprise)| !BSL !OSCRIPT |
+| C         | !C      | C#     | !C# !C-SHARP !DOTNET | C++    | !C++ !CPP |
+| CFScript  | !CFSCRIPT !CFC | ChaiScript| !CHAISCRIPT | CIL    | !CIL |
+| Cilk/C    | !CILKC !CILK-C | Cilk/C++| !CILKC++ !CILK-C++ !CILK | Clojure| !CLOJURE |
+| CMake     | !CMAKE  | COBOL  | !COBOL | CoffeeScript| !COFFEESCRIPT !COFFEE |
+| Concurnas | !CONCURNAS !CONC | Content-Security-Policy| !CSP | Cooklang| !COOKLANG |
+| Coq       | !COQ    | Crystal| !CRYSTAL | CSS Extras| !CSS-EXTRAS |
+| CSV       | !CSV    | CUE    | !CUE   | CWeb     | !CWEB !CWEB-TEX !CWEBTEX |
+| Cypher    | !CYPHER | D      | !D     | Dart     | !DART |
+| DataWeave | !DATAWEAVE !DW | DAX    | !DAX    | Dhall   | !DHALL |
+| Diff      | !DIFF   | Django/Jinja2| !DJANGO !JINJA2 | DNS zone file| !DNS-ZONE-FILE !DNS-ZONE |
+| Docker    | !DOCKER !DOCKERFILE | DOT (Graphviz)| !DOT !GV | EBNF   | !EBNF |
+| EditorConfig| !EDITORCONFIG | Eiffel| !EIFFEL | EJS    | !EJS !ETA |
+| Elixir    | !ELIXIR | Elm    | !ELM   | Embedded Lua templating| !ETLUA |
+| ERB       | !ERB    | Erlang | !ERLANG | Excel Formula| !EXCEL-FORMULA !XLSX !XLS |
+| F#        | !F# !F-SHARP | Factor| !FACTOR | False  | !FALSE |
+| Firestore security rules| !FIRESTORE-SECURITY-RULES | Flow   | !FLOW   | Fortran| !FORTRAN |
+| FreeMarker Template Language| !FTL | GameMaker Language| !GML !GAMEMAKERLANGUAGE | GAP (CAS)| !GAP |
+| G-code    | !GCODE  | GDScript| !GDSL | GEDCOM  | !GEDCOM |
+| gettext   | !GETTEXT !PO | GLSL   | !GLSL   | Go      | !GO    |
+| Go Module | !GO-MODULE !GO-MOD | Gradle| !GRADLE | GraphQL| !GRAPHQL |
+| Groovy    | !GROOVY | Haml   | !HAML   | Handlebars| !HANDLEBARS !HBS !MUSTACHE |
+| Haskell   | !HASKELL !HS | Haxe   | !HAXE   | HCL     | !HCL   |
+| HLSL      | !HLSL   | Hoon   | !HOON   | HTTP    | !HTTP  |
+| HTTP Public-Key-Pins| !HPKP | HTTP Strict-Transport-Security| !HSTS | IchigoJam| !ICHIGOJAM |
+| Icon      | !ICON   | ICU Message Format| !ICU-MESSAGE-FORMAT | Idris | !IDRIS !IDR |
+| .ignore   | !IGNORE !GITIGNORE !HGIGNORE !NPMIGNORE | Inform 7| !INFORM7 |
+| Ini       | !INI    | Io     | !IO     | J       | !J     |
+| Java      | !JAVA   | JavaDoc| !JAVADOC !JAVADOC-LIKE | Java stack trace| !JAVA-STACK-TRACE |
+| Jexl      | !JEXL   | Jolie  | !JOLIE  | JQ      | !JQ    |
+| JSDoc     | !JSDOC  | JS Extras| !JS-EXTRAS | JSON   | !JSON !WEBMANIFEST |
+| JSON5     | !JSON5  | JSONP  | !JSONP  | JS stack trace| !JS-STACK-TRACE |
+| JS Templates| !JS-TEMPLATES | Julia | !JULIA  | Keepalived Configure| !KEEPALIVED |
+| Keyman    | !KEYMAN | Kotlin | !KOTLIN !KT !KTS | KuMir (КуМир)| !KUMIR !KUM |
+| Kusto     | !KUSTO  | LaTeX  | !LATEX !TEX !CONTEXT | Latte  | !LATTE |
+| Less      | !LESS   | LilyPond| !LILYPOND !LY | Liquid | !LIQUID |
+| Lisp      | !LISP !EMACS !ELISP !EMACS-LISP | LiveScript| !LIVESCRIPT | LLVM IR| !LLVM |
+| Log file  | !LOG    | LOLCODE| !LOLCODE | Lua     | !LUA   |
+| Magma (CAS)| !MAGMA | Makefile| !MAKEFILE | Markdown| !MARKDOWN !MD |
+| Markup templating| !MARKUP-TEMPLATING | Mata    | !MATA   | MATLAB | !MATLAB |
+| MAXScript | !MAXSCRIPT !MEL | Mermaid | !MERMAID | METAFONT| !METAFONT |
+| Mizar     | !MIZAR  | MongoDB| !MONGODB | Monkey  | !MONKEY |
+| MoonScript| !MOONSCRIPT !MOON | N1QL    | !N1QL   | N4JS   | !N4JS !N4JSD |
+| Nand To Tetris HDL| !NAND2TETRIS-HDL | Naninovel Script| !NANISCRIPT !NANI | NASM   | !NASM |
+| NEON      | !NEON   | Nevod  | !NEVOD  | nginx   | !NGINX |
+| Nim       | !NIM    | Nix    | !NIX    | NSIS    | !NSIS  |
+| Objective-C| !OBJECTIVEC !OBJC | OCaml   | !OCAML  | Odin   | !ODIN  |
+| OpenCL    | !OPENCL | OpenQasm| !OPENQASM !QASM | Oz     | !OZ    |
+| PARI/GP   | !PARIGP | Parser | !PARSER | Pascal | !PASCAL !OBJECTPASCAL |
+| Pascaligo | !PASCALIGO | PATROL Scripting Language| !PSL | PC-Axis| !PCAXIS !PX |
+| PeopleCode| !PEOPLECODE !PCODE | Perl    | !PERL   | PHP    | !PHP   |
+| PHPDoc    | !PHPDOC | PHP Extras| !PHP-EXTRAS | PlantUML| !PLANT-UMl !PLANTUML |
+| PL/SQL    | !PLSQL  | PowerQuery| !POWERQUERY !PQ !XLSX !XLS | Processing| !PROCESSING !PDE |
+| Prolog    | !PROLOG | Properties| !PROPERTIES !PROPS | Protocol Buffers| !PROTOBUF !PROTO |
+| Public-Key-Pins| !PUBKEY-PINS | Puppet  | !PUPPET !PP | PureBasic| !PUREBASIC !PB |
+| PureScript| !PURESCRIPT !PSC | Python  | !PYTHON !PY | Python console| !PYCON |
+| Q#        | !QSHARP !QS | Q (kdb+ database)| !Q | QML    | !QML   |
+| Qore      | !QORE   | R       | !R      | ReasonML| !REASON !RE |
+| Racket    | !RACKET !RKT | Razor C#| !RAZOR !CSHTML | React JSX| !REACT !JSX |
+| React TSX | !REACT-TSX !TSX | Reason | !REASON !RE | Regex  | !REGEX |
+| Rego      | !REGO   | Ren'py  | !RENPY !RPY | ReScript| !RESCRIPT !RES |
+| reST (reStructuredText)| !REST !RESTRUCTUREDTEXT | Rip    | !RIP   |
+| Roboconf  | !ROBOCONF | Robot Framework| !ROBOTFRAMEWORK !ROBOT | Ruby   | !RUBY !RB |
+| Rust      | !RUST   | SAS    | !SAS    | Sass (Sass)| !SASS |
+| Sass (SCSS)| !SCSS  | Scala  | !SCALA  | Scheme  | !SCHEME |
+| Shell session| !SHELL-SESSION !SH-SESSION !SHELLSESSION | Smali  | !SMALI |
+| Smalltalk | !SMALLTALK | Smarty | !SMARTY | SML     | !SML !SMLNJ |
+| Solidity (Ethereum)| !SOLIDITY !SOL | Solution file| !SOLUTION-FILE !SLN | Soy (Closure Template)| !SOY |
+| SPARQL    | !SPARQL !RQ | Splunk SPL| !SPLUNK | SQL    | !SQL   |
+| Squirrel  | !SQUIRREL !SQF | Stan    | !STAN   | Stata Ado| !STATA !ADO |
+| Structured Text (IEC 61131-3)| !IEC-61131-3 !IECST !IEC-61131-3-ST | Stylus| !STYLUS |
+| SuperCollider| !SUPERCOLLIDER !SCLANG | Swift  | !SWIFT !SWIFT3 !SWIFT4 | Systemd configuration file| !SYSTEMD |
+| Swift     | !SWIFT  | T4 templating| !T4-TEMPLATING !T4 | T4 Text Templates (C#)| !T4-CS !T4-C# !T4-CSHARP !T4-C-Sharp !T4-C-Sharp-Sharp |
+| T4 Text Templates (VB)| !T4-VB !T4-VISUALBASIC !T4-VISUAL-BASIC | TAP   | !TAP   |
+| Tcl       | !TCL    | Template Toolkit 2| !TT2 !TEMPLATE-TOOLKIT !TEMPLATE-TOOLKIT2 |
+| Textile   | !TEXTILE | TOML   | !TOML   | Tremor | !TREMOR !TRICKLE !TROY |
+| Turtle    | !TURTLE !TRIG | Twig    | !TWIG   | TypeScript| !TYPESCRIPT !TS |
+| TypoScript| !TYPOSCRIPT !TSCONFIG | UnrealScript| !UNREALSCRIPT !USCRIPT !UC |
+| UO Razor Script| !UORAZOR | URI     | !URI !URL | V       | !V     |
+| Vala      | !VALA   | VB.Net | !VBNET !VB !VB-NET | VBA     | !VBA   |
+| Velocity  | !VELOCITY | Verilog | !VERILOG !VLOG | VHDL    | !VHDL  |
+| Vim script| !VIM !VIMSCRIPT | Visual Basic .NET| !VBNET !VB !VB-NET | Volt   | !VOLT  |
+| WarpScript| !WARPSCRIPT !WARP | WebAssembly| !WASM | Web IDL| !WEBIDL !WEB-IDL |
+| WGSL      | !WGSL   | Wiki markup| !WIKI !WIKI-MARKUP | Wolfram language| !WOLFRAM !MATHEMATICA !NB !WL |
+| Wren      | !WREN   | Xeora   | !XEORA !XEORACUBE | XML doc (.net)| !XML-DOC !XMLDOC |
+| Xojo (REALbasic)| !XOJO !REALBASIC | XQuery  | !XQUERY !XQ !XQU | YAML   | !YAML !YML |
+| YANG     | !YANG   | Zig     | !ZIG    |
 
 
 
