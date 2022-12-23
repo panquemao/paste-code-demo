@@ -34,9 +34,9 @@ window.addEventListener('load', () => {
 
         // Get first line of code
         const firstLine = window.value.split('\n')[0];
-        if(firstLine.startsWith("!")) {
+        if(firstLine.includes("!")) {
             // Get language
-            const language = firstLine.replace("!", "").toLowerCase();
+            const language = firstLine.split('!')[1].toLowerCase();
 
             // Set language
             codeWindow.setAttribute('class', `language-${language}`);
