@@ -81,6 +81,16 @@ window.addEventListener('load', () => {
                 // Get and set x and y
                 codeWindow.scrollTo(newWindow.scrollLeft, newWindow.scrollTop);
             });
+            newWindow.addEventListener('keydown', (e) => {
+                // Write tab on tab press
+                if(e.key == 'Tab') {
+                    e.preventDefault();
+                    const start = newWindow.selectionStart;
+                    const end = newWindow.selectionEnd;
+                    newWindow.value = newWindow.value.substring(0, start) + "\t" + newWindow.value.substring(end);
+                    newWindow.selectionStart = newWindow.selectionEnd = start + 1;
+                }
+            });
 
             // Insert 
             codeWindow.appendChild(code);
