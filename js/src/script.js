@@ -95,6 +95,8 @@ window.addEventListener('load', () => {
             newWindow.addEventListener('scroll', () => {
                 // Get and set x and y
                 codeWindow.scrollTo(newWindow.scrollLeft, newWindow.scrollTop);
+                // codeWindow.scrollTop = newWindow.scrollTop;
+                // codeWindow.scrollLeft = newWindow.scrollLeft;
             });
             newWindow.addEventListener('keydown', (e) => {
                 // Write tab on tab press
