@@ -88,7 +88,7 @@ window.addEventListener('load', () => {
                     const start = newWindow.selectionStart;
                     const end = newWindow.selectionEnd;
                     newWindow.value = newWindow.value.substring(0, start) + "\t" + newWindow.value.substring(end);
-                    newWindow.selectionStart = newWindow.selectionEnd = start + 1;
+                    // newWindow.selectionStart = newWindow.selectionEnd = start + 1;
                 }
             });
 
