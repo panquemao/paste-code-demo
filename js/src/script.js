@@ -1,3 +1,18 @@
+// Tab Size: Default 4
+
+let setTabSize = (size) => {
+    document.querySelectorAll('.textarea div pre code').forEach(textarea => {
+        textarea.style.tabSize = `${(size != 0 ? size : 4)}`;
+        textarea.style.MozTabSize = `${(size != 0 ? size : 4)}`;
+    });
+
+    tabSize = size;
+
+};
+let tabSize = 4;
+
+// ==============================================================
+
 window.addEventListener('load', () => {
     // ==== DARK MODE =========
     // Check if dark mode is enabled
@@ -83,12 +98,13 @@ window.addEventListener('load', () => {
             });
             newWindow.addEventListener('keydown', (e) => {
                 // Write tab on tab press
-                if(e.key == 'Tab') {
+                if(e.key == 'Tab' || e.keyCode == 9 || e.which == 9) {
                     e.preventDefault();
+
                     const start = newWindow.selectionStart;
-                    const end = newWindow.selectionEnd;
-                    newWindow.value = newWindow.value.substring(0, start) + "\t" + newWindow.value.substring(end);
-                    // newWindow.selectionStart = newWindow.selectionEnd = start + 1;
+                    newWindow.value = newWindow.value.substring(0, start) + " ".repeat(tabSize) + newWindow.value.substring(newWindow.selectionEnd);
+                    // fix caret position
+                    newWindow.selectionStart = newWindow.selectionEnd = start + tabSize;
                 }
             });
 
