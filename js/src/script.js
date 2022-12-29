@@ -107,6 +107,9 @@ window.addEventListener('load', () => {
                     newWindow.value = newWindow.value.substring(0, start) + " ".repeat(tabSize) + newWindow.value.substring(newWindow.selectionEnd);
                     // fix caret position
                     newWindow.selectionStart = newWindow.selectionEnd = start + tabSize;
+
+                    // Update code
+                    _update_code(newWindow)
                 }
             });
 
