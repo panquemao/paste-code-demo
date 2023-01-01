@@ -160,6 +160,7 @@ window.addEventListener('load', () => {
                 WINDOW_CONFIG.parent.removeChild(WINDOW_CONFIG.windows[WINDOW_CONFIG.windows.length - 1].parentElement);
                 // Remove last window from array
                 WINDOW_CONFIG.windows.pop();
+                WINDOW_CONFIG.codeWindow.pop(); // Remove code window ISSUE #7
                 WINDOW_CONFIG.current--;
             }
         });
