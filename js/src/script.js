@@ -51,7 +51,8 @@ window.addEventListener('load', () => {
         const firstLine = window.value.split('\n')[0];
         if(firstLine.includes("!")) {
             // Get language
-            const language = firstLine.split('!')[1].toLowerCase();
+            let arr = firstLine.split('!');
+            const language = arr[arr.length-1].toLowerCase();  // Fixed ISSUE #8
 
             // Set language
             codeWindow.setAttribute('class', `language-${language}`);
