@@ -12,7 +12,21 @@
 :root{
     --footer-height: 22px;
     --font-size: 16px;
+    // -------- Editor
+    --padd : 30px;
+    --lineS : 1.1;
+    --innerPadd : 10px;
 }
+
+.no-select {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+  }
 
 // Body styles
 body{
@@ -50,6 +64,15 @@ body{
             div.textarea{
                 > div{
                     background-color: #000000;
+                    .line-numbers-rows{
+                        border-right: .5px solid rgba(#ffffff, 0.3);
+                        background-color: rgb(50, 50, 50);
+                        > span{
+                            &:before{
+                                color: #c9c9c9;
+                            }
+                        }
+                    }
                     textarea{
                         caret-color: #fff;
                     }
@@ -57,6 +80,9 @@ body{
                         code{
                             color: #ffffff;
                         }
+                    }
+                    textarea, pre, .line-numbers-rows{
+                        line-height: var(--lineS) !important;
                     }
                 }
             }
@@ -74,6 +100,29 @@ body{
                 flex: 1;
                 position: relative;
                 background-color: #ffffff;
+                .line-numbers-rows{
+                    width: var(--padd) !important;
+                    padding: 10px 5px 10px 3px;
+                    text-align: right;
+                    height: min-content;
+                    font-family: "SFMono-Regular", Consolas, Liberation Mono, Menlo, monospace !important;
+                    border-right: .5px solid rgba(#000000, 0.3);
+                    background-color: rgb(250, 250, 250);
+                    overflow: hidden;
+                    > span{
+                        counter-increment: linenumber;
+                        &:before{
+                            content: counter(linenumber);
+                            display: block;
+                            color: #506882;
+                            // color: #f92672;
+                        }
+                    }
+                    *{
+                        font-size: calc(var(--font-size) * 0.8) !important;
+                        line-height: calc(var(--lineS) * 1.2) !important;
+                    }
+                }
                 textarea{
                     border: none;
                     resize: none;
@@ -84,14 +133,14 @@ body{
                     color: transparent;
                     // color: rgba(rgb(255, 255, 255), 0.8);
                     caret-color: #000;
-                    padding: 10px;
+                    padding: 10px 10px 10px calc(var(--padd) + var(--innerPadd)) !important;
                 }
                 pre{
                     z-index: 0;
                     margin: 0 !important;
                     line-height: 1 !important;
                     background-color: transparent !important;
-                    padding: 10px 10px calc(10px + var(--font-size)) 10px;
+                    padding: 10px 10px calc(10px + var(--font-size)) calc(var(--padd) + var(--innerPadd)) !important;
                     // height: calc(100% - 16px) !important;
                 
                     code{
@@ -101,9 +150,10 @@ body{
                         line-height: 1 !important;
                     }
                 }
-                textarea, pre{
+                textarea, pre, .line-numbers-rows{
                     position: absolute;
-                    line-height: 1 !important;
+                    transition: all 0.5s, background-color 0s;
+                    line-height: var(--lineS) !important;
                     top: 0;
                     width: 100%;
                     left: 0;

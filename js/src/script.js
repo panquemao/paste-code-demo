@@ -48,7 +48,8 @@ window.addEventListener('load', () => {
         const codeWindow = WINDOW_CONFIG.codeWindow[index];
 
         // Get first line of code
-        const firstLine = window.value.split('\n')[0];
+        const _LINES = window.value.split('\n')
+        const firstLine = _LINES[0];
         if(firstLine.includes("!")) {
             // Get language
             let arr = firstLine.split('!');
@@ -61,6 +62,23 @@ window.addEventListener('load', () => {
         codeWindow.innerHTML = window.value.replace(new RegExp("&", "g"), "&amp;").replace(new RegExp("<", "g"), "&lt;"); /* Global RegExp */
 
         Prism.highlightElement(codeWindow);
+
+
+        // Update line numbers
+        document.querySelector(':root').style
+        .setProperty('--padd',
+            (_LINES.length >= 100) ?
+                (_LINES.length >= 1000) ? 
+                    (_LINES.length >= 10000) ?
+                        "60px"
+                    : "50px"
+                : "40px"
+            : "30px"
+        );
+
+        // Get line numbers
+        const lineNumbers = window.parentElement.querySelector('.line-numbers-rows');
+        lineNumbers.innerHTML = Array(_LINES.length).fill('<span></span>').join('')
     }
 
     // ==== ADD WINDOWS =========
@@ -84,6 +102,13 @@ window.addEventListener('load', () => {
             //
             const code = document.createElement('code');
             //
+            // Line Numbers
+            const lineNumbers = document.createElement('span');
+            lineNumbers.setAttribute('aria-hidden', 'true');
+            lineNumbers.setAttribute('class', 'line-numbers-rows no-select');
+            lineNumbers.innerHTML = '<span></span>';
+
+            // Window label
             const newWindow = document.createElement('textarea');
             newWindow.setAttribute('class', 'textarea-main');
             newWindow.setAttribute('spellcheck', 'false');
@@ -96,6 +121,7 @@ window.addEventListener('load', () => {
             newWindow.addEventListener('scroll', () => {
                 // Get and set x and y
                 codeWindow.scrollTo(newWindow.scrollLeft, newWindow.scrollTop);
+                lineNumbers.scrollTo(newWindow.scrollLeft, newWindow.scrollTop);
                 // codeWindow.scrollTop = newWindow.scrollTop;
                 // codeWindow.scrollLeft = newWindow.scrollLeft;
             });
@@ -116,6 +142,7 @@ window.addEventListener('load', () => {
 
             // Insert 
             codeWindow.appendChild(code);
+            windowParent.appendChild(lineNumbers);
             windowParent.appendChild(newWindow);
             windowParent.appendChild(codeWindow);
             WINDOW_CONFIG.parent.appendChild(windowParent);

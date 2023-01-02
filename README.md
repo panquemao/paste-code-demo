@@ -1,6 +1,7 @@
 # Paste Code
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
+### 🎉Paste Code Editor 2023 New Update! 🎉
 Try it! [https://zhenglinlei.github.io/paste-code/](https://zhenglinlei.github.io/paste-code/)
 
 ### Plain Text Editor
