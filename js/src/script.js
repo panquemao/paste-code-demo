@@ -89,18 +89,18 @@ window.addEventListener('load', () => {
     }
 
     // ====  SET LINES  =========
-    const _set_lines = (window) => {
+    const _set_lines = (window, delay=-1) => {
         const index = window.value.substring(0, window.selectionStart).split("\n").length;
         const lines = window.parentElement.querySelector('.line-numbers-rows');
 
         // Set line active
 
-        if(!lines.children[index-1].classList.contains('current')) {
+        if((index + delay) < lines.children.length && !lines.children[index+delay].classList.contains('current')) {
             // Clear lines class
             _clear_lines(window);
 
             // Set current line
-            lines.children[index-1].classList.add('current');
+            lines.children[index+delay].classList.add('current');
         }
     }
     const _clear_lines = (window) => {
@@ -119,6 +119,7 @@ window.addEventListener('load', () => {
             // Add window
             // Create this structure
             // <div>
+            //     <div class="line-numbers-rows"></div>
             //     <textarea class="textarea-main" spellcheck="false" oninput="_update_code(this)"></textarea>
             //     <pre aria-hidden="true">
             //         <code></code>
@@ -177,6 +178,29 @@ window.addEventListener('load', () => {
                     _update_code(newWindow)
 
                 }
+                // Update lines number if the user jump lines
+                if(e.key == 'ArrowUp' || e.keyCode == 38 || e.which == 38){
+                    // Overload line numbers fnc
+                    _set_lines(newWindow, delay=-2);
+                }
+                
+                if(e.key == 'ArrowDown' || e.keyCode == 40 || e.which == 40){
+                    // Overload line numbers fnc
+                    _set_lines(newWindow, delay=0);
+                }
+
+
+                // ======= SHORTCUTS =======
+                // Select line
+                if (e.altKey && e.key == 'l' || e.altKey && e.keyCode == 76 || e.altKey && e.which == 76){
+                    e.preventDefault();
+                    
+                    // Select all line from textarea
+                    const start = newWindow.value.substring(0, newWindow.selectionStart).lastIndexOf("\n") + 1;
+                    const end = newWindow.value.substring(newWindow.selectionEnd).indexOf("\n") + newWindow.selectionEnd;
+                    newWindow.setSelectionRange(start, end);
+                }
+
             });
             newWindow.addEventListener('keyup', (e) => {
                 // Update lines number if the user jump lines
