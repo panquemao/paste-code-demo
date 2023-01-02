@@ -65,7 +65,7 @@ window.addEventListener('load', () => {
 
 
         // Update line numbers
-        document.querySelector(':root').style
+        document.querySelector(`.w-${index}`).style
         .setProperty('--padd',
             (_LINES.length >= 100) ?
                 (_LINES.length >= 1000) ? 
@@ -79,6 +79,26 @@ window.addEventListener('load', () => {
         // Get line numbers
         const lineNumbers = window.parentElement.querySelector('.line-numbers-rows');
         lineNumbers.innerHTML = Array(_LINES.length).fill('<span></span>').join('')
+    }
+
+    // ====  SET LINES  =========
+    const _set_lines = (window) => {
+        const index = window.value.substring(0, window.selectionStart).split("\n").length;
+        const lines = window.parentElement.querySelector('.line-numbers-rows');
+
+        // Clear lines class
+        _clear_lines(window);
+
+        // Set current line
+        lines.children[index-1].classList.add('current');
+    }
+    const _clear_lines = (window) => {
+        const lines = window.parentElement.querySelector('.line-numbers-rows');
+
+        // Clear lines class
+        Array.from(lines.children).forEach(line => {
+            line.classList.remove('current');
+        });
     }
 
     // ==== ADD WINDOWS =========
@@ -118,6 +138,13 @@ window.addEventListener('load', () => {
             newWindow.setAttribute('aria-label', 'Paste Code');
             newWindow.setAttribute('tabindex', '0');
             newWindow.addEventListener('input', () => _update_code(newWindow));
+            newWindow.addEventListener('mouseup', () =>  _set_lines(newWindow)); // ISSUE LINES NUMBER; UPDATE #9
+
+            // Only for mobile devices
+            if((('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0))){
+                newWindow.addEventListener('touchend', () =>  _set_lines(newWindow));   // Update lines number
+            }
+
             newWindow.addEventListener('scroll', () => {
                 // Get and set x and y
                 codeWindow.scrollTo(newWindow.scrollLeft, newWindow.scrollTop);
@@ -137,8 +164,19 @@ window.addEventListener('load', () => {
 
                     // Update code
                     _update_code(newWindow)
+
                 }
+                // Overload line numbers fnc
+                _set_lines(newWindow);
             });
+            newWindow.addEventListener('keyup', () => _set_lines(newWindow));   // Update line numbers
+
+            // Onfocusout
+            newWindow.addEventListener('focusout', () => {
+                // Clear lines class
+                _clear_lines(newWindow);
+            });
+
 
             // Insert 
             codeWindow.appendChild(code);
@@ -151,6 +189,9 @@ window.addEventListener('load', () => {
 
             // Code insert
             WINDOW_CONFIG.codeWindow.push(code);
+
+            // Update attribute for window
+            windowParent.classList.add(`w-${WINDOW_CONFIG.current-1}`);         // ------> To update Line Numbers Padding
         }
     }
 
