@@ -38,6 +38,7 @@ window.addEventListener('load', () => {
         windows: [],
         codeWindow: [],
         windows_value: [],
+        lineActive: [],
     }
 
     // ==== UPDATE CODE =========
@@ -79,6 +80,12 @@ window.addEventListener('load', () => {
         // Get line numbers
         const lineNumbers = window.parentElement.querySelector('.line-numbers-rows');
         lineNumbers.innerHTML = Array(_LINES.length).fill('<span></span>').join('')
+
+        // Check if window is focused
+        if(window === document.activeElement){
+            // Update line numbers
+            _set_lines(window);
+        }
     }
 
     // ====  SET LINES  =========
@@ -86,11 +93,15 @@ window.addEventListener('load', () => {
         const index = window.value.substring(0, window.selectionStart).split("\n").length;
         const lines = window.parentElement.querySelector('.line-numbers-rows');
 
-        // Clear lines class
-        _clear_lines(window);
+        // Set line active
 
-        // Set current line
-        lines.children[index-1].classList.add('current');
+        if(!lines.children[index-1].classList.contains('current')) {
+            // Clear lines class
+            _clear_lines(window);
+
+            // Set current line
+            lines.children[index-1].classList.add('current');
+        }
     }
     const _clear_lines = (window) => {
         const lines = window.parentElement.querySelector('.line-numbers-rows');
@@ -166,10 +177,20 @@ window.addEventListener('load', () => {
                     _update_code(newWindow)
 
                 }
-                // Overload line numbers fnc
-                _set_lines(newWindow);
             });
-            newWindow.addEventListener('keyup', () => _set_lines(newWindow));   // Update line numbers
+            newWindow.addEventListener('keyup', (e) => {
+                // Update lines number if the user jump lines
+                if
+                    ((e.key == 'Enter' || e.keyCode == 13 || e.which == 13)
+                    || (e.key == 'ArrowUp' || e.keyCode == 38 || e.which == 38)
+                    || (e.key == 'ArrowDown' || e.keyCode == 40 || e.which == 40)
+                    || (e.key == 'ArrowLeft' || e.keyCode == 37 || e.which == 37)
+                    || (e.key == 'ArrowRight' || e.keyCode == 39 || e.which == 39))
+                {
+                    // Overload line numbers fnc
+                    _set_lines(newWindow);
+                }
+            });   // Update line numbers
 
             // Onfocusout
             newWindow.addEventListener('focusout', () => {
