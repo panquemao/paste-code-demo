@@ -200,7 +200,52 @@ window.addEventListener('load', () => {
                     const end = newWindow.value.substring(newWindow.selectionEnd).indexOf("\n") + newWindow.selectionEnd;
                     newWindow.setSelectionRange(start, end);
                 }
+                // // Move line up and the line above down
+                // if (e.altKey && e.key == 'ArrowUp' || e.altKey && e.keyCode == 38 || e.altKey && e.which == 38){
+                //     e.preventDefault();
 
+                //     // Get above and current line
+                //     const start = newWindow.value.substring(0, newWindow.selectionStart).lastIndexOf("\n") + 1;
+                //     const end = newWindow.value.substring(newWindow.selectionEnd).indexOf("\n") + newWindow.selectionEnd;
+
+                //     // Get above line
+                //     const aboveStart = newWindow.value.substring(0, start - 1).lastIndexOf("\n") + 1;
+                //     const aboveEnd = newWindow.value.substring(start).indexOf("\n") + start;
+
+                //     // Get lines
+                //     const aboveLine = newWindow.value.substring(aboveStart, aboveEnd);
+                //     const line = newWindow.value.substring(start, end);
+
+                //     // replace line
+                //     newWindow.value = newWindow.value.substring(0, aboveStart) + line + newWindow.value.substring(aboveEnd);
+
+                //     // Update code
+                //     _update_code(newWindow);
+
+                //     // Select
+                //     // newWindow.setSelectionRange(start - 1, end - 1);
+                // }
+                // // Move line down
+                // if (e.altKey && e.key == 'ArrowDown' || e.altKey && e.keyCode == 40 || e.altKey && e.which == 40){
+                //     e.preventDefault();
+                    
+                //     // Get line
+                //     const start = newWindow.value.substring(0, newWindow.selectionStart).lastIndexOf("\n") + 1;
+                //     const end = newWindow.value.substring(newWindow.selectionEnd).indexOf("\n") + newWindow.selectionEnd;
+                //     const line = newWindow.value.substring(start, end);
+
+                //     // Remove line
+                //     newWindow.value = newWindow.value.substring(0, start) + newWindow.value.substring(end);
+
+                //     // Add line
+                //     newWindow.value = newWindow.value.substring(0, end) + line + newWindow.value.substring(end);
+
+                //     // Update code
+                //     _update_code(newWindow);
+
+                //     // Select line
+                //     newWindow.setSelectionRange(end, end + line.length);
+                // }
             });
             newWindow.addEventListener('keyup', (e) => {
                 // Update lines number if the user jump lines
@@ -239,13 +284,30 @@ window.addEventListener('load', () => {
             windowParent.classList.add(`w-${WINDOW_CONFIG.current-1}`);         // ------> To update Line Numbers Padding
         }
     }
-
+    // ===== REMOVE WINDOWS =====
+    const removeWindow = () => {
+        if (WINDOW_CONFIG.current > WINDOW_CONFIG.min) {
+            // Remove last window
+            WINDOW_CONFIG.parent.removeChild(WINDOW_CONFIG.windows[WINDOW_CONFIG.windows.length - 1].parentElement);
+            // Remove last window from array
+            WINDOW_CONFIG.windows.pop();
+            WINDOW_CONFIG.codeWindow.pop(); // Remove code window ISSUE #7
+            WINDOW_CONFIG.current--;
+        }
+    }
 
     // === Close text offer =====
     const closeOffer = () =>  document.querySelector("body > footer").classList.remove("text-offer");
 
     // ==== MAIN =========
     const __main__ = () => {
+        // Open Terminal
+        window.addEventListener('keydown', (e) => {
+            if((e.metaKey || e.ctrlKey || e.altKey) && e.key == 't' || (e.metaKey || e.ctrlKey || e.altKey) && e.keyCode == 84 || (e.metaKey || e.ctrlKey || e.altKey) && e.which == 84) {
+                e.preventDefault();
+                _toggle_terminal();
+            }
+        });
         // Invert color
         const invert = document.querySelector('.invert-color');
         // Toggle invert color
@@ -268,16 +330,7 @@ window.addEventListener('load', () => {
         // Add window
         document.querySelector('#add-w').addEventListener('click', addWindow);
         // Remove window
-        document.querySelector('#remove-w').addEventListener('click', () => {
-            if (WINDOW_CONFIG.current > WINDOW_CONFIG.min) {
-                // Remove last window
-                WINDOW_CONFIG.parent.removeChild(WINDOW_CONFIG.windows[WINDOW_CONFIG.windows.length - 1].parentElement);
-                // Remove last window from array
-                WINDOW_CONFIG.windows.pop();
-                WINDOW_CONFIG.codeWindow.pop(); // Remove code window ISSUE #7
-                WINDOW_CONFIG.current--;
-            }
-        });
+        document.querySelector('#remove-w').addEventListener('click', removeWindow);
 
 
         // ==== URL GENERATOR =========
@@ -320,6 +373,82 @@ window.addEventListener('load', () => {
             document.execCommand('copy');
             
             closeOffer()
+        });
+
+
+        // ==== TERMINAL =========
+        const _toggle_terminal = (type="toggle") => {
+            switch (type) {
+                case "open":
+                    document.querySelector('#terminal').classList.add('open');
+                    terminal.focus();
+                    break;
+                case "close":
+                    document.querySelector('#terminal').classList.remove('open');
+                    break;
+                case "toggle":
+                    document.querySelector('#terminal').classList.toggle('open');
+                    terminal.focus();
+                    break;
+            }
+            
+        }
+
+        const _option_click = (e) => {
+            switch (e) {
+                case "add":
+                    addWindow();
+                    break;
+                case "remove":
+                    removeWindow();
+                    break;
+                case "exit":
+                    _toggle_terminal("close");
+                    break;
+
+            }
+        }
+
+        const terminal = document.querySelector('#terminal-main');
+        const terminalInput = document.querySelector('#terminal-main-command');
+        const terminalCaret = document.querySelector('#terminal-caret');
+
+        document.querySelector('#open-t').addEventListener('click', () => _toggle_terminal("open"));
+        document.querySelector('#close-t').addEventListener('click', () => _toggle_terminal("close"));
+
+        // Terminal input
+        terminal.addEventListener('focus', () => terminalCaret.classList.add('blink'));
+        terminal.addEventListener('blur', () => terminalCaret.classList.remove('blink'));
+        terminal.addEventListener('keydown', (e) => {
+            if(!e.ctrlKey && !e.metaKey && !e.altKey){
+                e.preventDefault();
+
+                // Write inside terminalInput
+                if(e.key.length == 1){
+                    terminalInput.innerText += e.key;
+                }
+            }
+
+            // ==== OPTIONS ====
+            // Paste
+            if (e.key == "v" && (e.ctrlKey || e.metaKey)) {
+                navigator.clipboard.readText().then(text => {
+                    terminalInput.innerText += text;
+                });
+            }
+            // Backspace
+            if (e.key == "Backspace") {
+                terminalInput.innerText = terminalInput.innerText.slice(0, -1);
+            }
+            // Enter
+            if (e.key == "Enter") {
+                alert('push')
+            }
+        });
+
+        // Terminal options
+        document.querySelectorAll('.terminal-option').forEach(option => {
+            option.addEventListener('click', () => _option_click(option.getAttribute('data-option')));
         });
     };
 

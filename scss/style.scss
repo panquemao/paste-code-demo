@@ -1,12 +1,20 @@
 // Variables
 :root{
-    --footer-height: 22px;
+    --footer-height: 20px;
 
     --font-size: 12px;
     // -------- Editor
     --padd : 30px;
     --lineS : 1.2;
     --innerPadd : 10px;
+    // -------- Terminal
+    --termSize : 45%;
+    --termOption : 10%;
+    // Mobile query
+    @media screen and (max-width: 600px){
+        --termOption : 20%;
+    }
+    
 }
 *{
     box-sizing: border-box;
@@ -91,16 +99,50 @@ body{
                     }
                 }
             }
+            div#terminal{
+                background-color: #000000;
+                border-top: 2px solid #ffffff;
+                > header{
+                    background-color: rgb(50, 50, 50);
+                    border-bottom: .5px solid rgba(#fff, 0.3);
+                    color: #ffffff;
+                    a{
+                        &:hover{
+                            background: #fff;
+                            color: #000;
+                        }
+                    }
+                }
+                > main{
+                    > #terminal-fast-option{
+                        border-left: .5px solid rgba(#fff, 0.3);
+                        background-color: rgb(50, 50, 50);
+                    }
+                    > #terminal-main{
+                        #terminal-main-input{
+                            #terminal-caret{
+                                border: 1px solid rgba(255, 255, 255, 1);
+                                &.blink{
+                                    background-color: rgba(255, 255, 255, 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     > main{
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - var(--footer-height));
         div.textarea{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(max(215px, 45vw), 2fr));
             grid-gap: 2px;
             width: 100vw;
-            height: calc(100vh - var(--footer-height));
-            // height: 100vh;
+            flex: 1;
+            height: calc(100% - var(--termSize));
             > div{
                 flex: 1;
                 position: relative;
@@ -167,6 +209,100 @@ body{
                 }
             }
         }
+        div#terminal{
+            &.open{
+                display: block;
+            }
+            flex: 1;
+            display: none;
+            height: var(--termSize);
+            border-top: 2px solid #000000;
+            background-color: #fff;
+            position: relative;
+            > header{
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+                z-index: 2;
+                align-items: center;
+                border-bottom: .5px solid rgba(#000000, 0.3);
+                background-color: rgb(240, 240, 240);
+                a{
+                    padding: 5px;
+
+                    &:hover{
+                        background: #000;
+                        color: #fff;
+                    }
+                    &.close-terminal{
+                        padding: 5px 10px;
+                    }
+                }
+            }
+            > main{
+                z-index: 1;
+                display: flex;
+                width: 100%;
+                height: 100%;
+                position: relative;
+                padding: 25px 0 0 0;
+                > #terminal-main{
+                    width: calc(100% - var(--termOption));
+                    padding: 10px;
+                    &:focus{
+                        outline: none;
+                    }
+                    #terminal-main-input{
+                        #terminal-main-command{
+                            display: inline;
+                            word-break: break-all;
+                            outline: none;
+                            visibility: visible;
+                        }
+                        #terminal-caret{
+                            padding: 0;
+                            outline: none;
+                            border: 1px solid rgba(0, 0, 0, 1);
+                            outline: none;
+                            background-color: transparent;
+                            display: inline-block;
+                            font-family: monospace;
+                            width: 8px;
+                            height: 100%;
+                            &:hover{
+                                background-color: transparent;
+                            }
+                            &.blink{
+                                background-color: rgba(0, 0, 0, 1);
+                                // animation: blink 1s infinite;
+                            }
+                            // @keyframes blink{
+                            //     0%{
+                            //         opacity: 0;
+                            //     }
+                            // }
+                        }
+                    }
+                }
+                > #terminal-fast-option{
+                    width: var(--termOption);
+                    border-left: .5px solid rgba(#000000, 0.3);
+                    background-color: rgb(240, 240, 240);
+                    > a{
+                        display: block;
+                        padding: 10px;
+                        width: 100%;
+                        &:hover{
+                            background: #000;
+                            color: #fff;
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
@@ -216,19 +352,18 @@ body{
     // Mobile
     @media only screen and (max-width: 600px) {
         > footer{
-            .nav-default .mobile-unshow{
-                display: none;
-            }
             .nav-default{
                 justify-content: space-around;
             }
         }
+
+        .mobile-unshow{
+            display: none;
+        }
     }
     @media only screen and (min-width: 600px) {
-        > footer{
-            .nav-default .desktop-unshow{
-                display: none;
-            }
+        .desktop-unshow{
+            display: none;
         }
     }
 }
