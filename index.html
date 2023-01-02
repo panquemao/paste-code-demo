@@ -15,6 +15,36 @@
         <div class="textarea">
             <!-- Code editor -->
         </div>
+        <div id="terminal">
+            <!-- Terminal -->
+            <header>
+                <div>
+                    <a class="terminal-list">[<span class="mobile-unshow">terminal</span><span class="desktop-unshow"> T </span>]</a>
+                    <a class="terminal-commands">[<span class="mobile-unshow">commands</span><span class="desktop-unshow"> C </span>]</a>
+                </div>
+                <div>
+                    <a id="close-t">[close]</a>
+                </div>
+            </header>
+            <main>
+                <div id="terminal-main" tabindex="0">
+                    <div id="terminal-main-history">
+                    </div>
+                    <div id="terminal-main-input">
+                        <span class="token title important"><span class="token punctuation">@</span>User $ </span>
+                        <pre id="terminal-main-command">CANNOT BE USED YET!</pre><button id="terminal-caret" for="terminal-main-command">&nbsp;</button>
+                    </div>
+                </div>
+                <div id="terminal-fast-option">
+                    <a class="terminal-option" data-option="reset">[reset<span class="mobile-unshow"> options</span>]</a>
+                    <a class="terminal-option" data-option="clear">[clear<span class="mobile-unshow"> terminal</span>]</a>
+                    <a class="terminal-option" data-option="help">[help<span class="mobile-unshow"> commands</span>]</a>
+                    <a class="terminal-option" data-option="exit">[exit<span class="mobile-unshow"> terminal</span>]</a>
+                    <a class="terminal-option" data-option="add">[add<span class="mobile-unshow"> window</span>]</a>
+                    <a class="terminal-option" data-option="remove">[remove<span class="mobile-unshow"> window</span>]</a>
+                </div>
+            </main>
+        </div>
     </main>
     <footer class="no-select">
         <span class="nav-default">
@@ -25,6 +55,7 @@
             <div>
                 <a id="add-w" alt="Add Windows">[<span class="mobile-unshow">add</span><span class="desktop-unshow"> + </span>]</a>
                 <a id="remove-w" alt="Remove Windows">[<span class="mobile-unshow">remove</span><span class="desktop-unshow"> - </span>]</a>
+                <a id="open-t" alt="Open Terminal Windows">[<span class="mobile-unshow">terminal</span><span class="desktop-unshow"> T </span>]</a>
             </div>
             <div>
                 <a class="generate-url" data-type="url">[<span class="mobile-unshow">generate </span>url]</a>

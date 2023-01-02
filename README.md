@@ -1,8 +1,12 @@
 # Paste Code
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
-### 🎉Paste Code Editor 2023 New Update! 🎉
+### 🎉 Paste Code Editor 2023 New Update! 🎉
 Try it! [https://zhenglinlei.github.io/paste-code/](https://zhenglinlei.github.io/paste-code/)
+
+### Updates
+`2023 - 01 - 0x: ` Surprise! We have a new update! Customise your editor with the help of our inner terminal. You can use `!help` to get more information. **(Not operative yet)**
+`2023 - 01 - 02: ` New UI and funtionalities. Code line numbers and new Button Styles.
 
 ### Plain Text Editor
 Also can try our notebook paste: [https://github.com/ZhengLinLei/paste](https://github.com/ZhengLinLei/paste)
