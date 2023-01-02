@@ -71,10 +71,10 @@ window.addEventListener('load', () => {
             (_LINES.length >= 100) ?
                 (_LINES.length >= 1000) ? 
                     (_LINES.length >= 10000) ?
-                        "60px"
-                    : "50px"
-                : "40px"
-            : "30px"
+                        "55px"
+                    : "45px"
+                : "35px"
+            : "25px"
         );
 
         // Get line numbers
