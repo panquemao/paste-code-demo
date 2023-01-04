@@ -448,6 +448,9 @@ window.addEventListener('load', () => {
                 case "exit":
                     _TERMINAL.exec('terminal close');
                     break;
+                case "clear":
+                    _TERMINAL.exec('cls');
+                    break;
 
             }
         }
@@ -515,10 +518,106 @@ window.addEventListener('load', () => {
             option.addEventListener('click', () => _option_click(option.getAttribute('data-option')));
         });
 
-        document.querySelector('#scroll-height.terminal').addEventListener('drag', (e) => {
-            // Resize terminal height
-            (document.documentElement || document.querySelector(':root')).style.setProperty('--termSize', `${e.clientY}px`);
+
+        // ==== RESIZE ====
+        // Get (x,y) position of event
+        const _getXY = (e) => {
+            if(e.type == 'touchstart' || e.type == 'touchmove' || e.type == 'touchend' || e.type == 'touchcancel'){
+                var evt = (typeof e.originalEvent === 'undefined') ? e : e.originalEvent;
+                var touch = evt.touches[0] || evt.changedTouches[0];
+                
+                x = touch.pageX;
+                y = touch.pageY;
+            } else if (e.type == 'mousedown' || e.type == 'mouseup' || e.type == 'mousemove' || e.type == 'mouseover'|| e.type=='mouseout' || e.type=='mouseenter' || e.type=='mouseleave') {
+                x = e.clientX;
+                y = e.clientY;
+            }
+            return {x, y};
+        }
+        ['mousedown','touchstart'].forEach( evt => {
+            document.querySelector('#scroll-height.terminal').addEventListener(evt, (e) => {
+                // If the event is touchstart
+                let coords = _getXY(e);
+    
+                let _PARENT = terminal.parentElement.parentElement;
+                // Resize terminal height
+                let _MAX = window.innerHeight * 0.8;
+                let _MIN = window.innerHeight * 0.2;
+                let _HEIGHT = _PARENT.getBoundingClientRect().height;
+                let _START = coords.y;
+                
+                const fncTouch = (e) => {
+
+                    // Remove if the event is passive
+                    if(!['touchstart', 'touchmove', 'touchend', 'touchcancel'].includes(e.type)){
+                        e.preventDefault();
+                    }
+                    
+                    // If the event is touchstart
+                    let coordsM = _getXY(e);
+
+                    document.body.classList.add('row-resize');
+    
+                    let _NEW_HEIGHT = _HEIGHT - (coordsM.y - _START); // - (e.clientY - _START); ---> Because the height grows from bottom to top
+    
+                    if(_NEW_HEIGHT > _MIN && _NEW_HEIGHT < _MAX){
+                        _PARENT.style.height = `${_NEW_HEIGHT}px`;
+                    }
+                }
+                window.onmousemove = fncTouch;
+                window.ontouchmove = fncTouch;
+            });
+
+            document.querySelector('#scroll-width.terminal-opt').addEventListener(evt, (e) => {
+                // If the event is touchstart
+                let coords = _getXY(e);
+
+                let _PARENT = document.querySelector('#terminal-fast-option');
+                // Resize terminal height
+                let _MAX = window.innerWidth * 0.5;
+                let _MIN = window.innerWidth * 0.1;
+                let _WIDTH = _PARENT.getBoundingClientRect().width;
+                let _START = coords.x;
+
+
+                const fncTouch = (e) => {
+                    
+                    // Remove if the event is passive
+                    if(!['touchstart', 'touchmove', 'touchend', 'touchcancel'].includes(e.type)){
+                        e.preventDefault();
+                    }
+
+                    // If the event is touchstart
+                    let coordsM = _getXY(e);
+
+                    document.body.classList.add('col-resize');
+    
+                    let _NEW_WIDTH = _WIDTH - (coordsM.x - _START); // - (e.clientX - _START) ---> Because the width grows from right to left
+    
+                    if(_NEW_WIDTH > _MIN && _NEW_WIDTH < _MAX){
+                        document.documentElement.style.setProperty('--termOption', `${_NEW_WIDTH}px`);
+                    }
+                }
+                
+                window.onmousemove = fncTouch;
+                window.ontouchmove = fncTouch;
+            });
         });
+
+        ['mouseup','touchend'].forEach( evt => {
+            window.addEventListener(evt, (e) => {
+                document.body.classList.remove('row-resize');
+                document.body.classList.remove('col-resize');
+                window.onmousemove = null;
+                window.ontouchmove = null;
+
+
+                // Save terminal height and option width
+                localStorage.setItem('terminalHeight', terminal.parentElement.parentElement.getBoundingClientRect().height);
+                localStorage.setItem('terminalOptWidth', document.querySelector('#terminal-fast-option').getBoundingClientRect().width);
+            });
+        });
+
         // ==== TERMINAL CLASS =========
         const _TERMINAL = new Terminal(
             {
@@ -547,12 +646,12 @@ window.addEventListener('load', () => {
         // Check terminal position
         if (localStorage.getItem('terminalHeight')){
             // Resize terminal height
-            (document.documentElement || document.querySelector(':root')).style.setProperty('--termSize', `${100 * parseFloat(localStorage.getItem('terminalHeight'))}%`);
+            (document.documentElement || document.querySelector(':root')).style.setProperty('--termSize', `${parseFloat(localStorage.getItem('terminalHeight'))}px`);
         }
 
         if (localStorage.getItem('terminalOptWidth')){
             // Resize terminal option width
-            (document.documentElement || document.querySelector(':root')).style.setProperty('--termOption', `${100 * parseFloat(localStorage.getItem('terminalOptWidth'))}%`);
+            (document.documentElement || document.querySelector(':root')).style.setProperty('--termOption', `${parseFloat(localStorage.getItem('terminalOptWidth'))}px`);
         }
 
         // Check if terminal is open

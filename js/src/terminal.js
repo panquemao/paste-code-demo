@@ -74,14 +74,14 @@ class Terminal{
             if(this.commands[args[0]] == 0 || this.commands[args[0]].includes(args[1])){
                 this.#hash.terminal.config.position = 0;
                 this.#hash.terminal.input.innerHTML = "";
-                
+
                 return this.execution[args[0]](args);
             }
 
-            return [0, "Path not found"];
+            return [0, `Path ${args[1]} not found`];
         }
 
-        return [0, "Command not found"];
+        return [0, `Command ${args[0]} not found`];
     }
 
     // terminal
@@ -95,7 +95,7 @@ class Terminal{
             let loop = 0;
             if(opt.length > 2){
                 if(parseInt(opt[2])) loop = parseInt(opt[2]);
-                else return [0, "Invalid argument"];
+                else return [0, `Invalid argument ${opt[2]}`];
             }else loop = 1;
 
             for (let i = 0; i < loop; i++) {
