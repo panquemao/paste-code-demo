@@ -16,6 +16,7 @@
             <!-- Code editor -->
         </div>
         <div id="terminal">
+            <div id="scroll-height" class="scroll terminal"></div>
             <!-- Terminal -->
             <header>
                 <div>
@@ -29,19 +30,50 @@
             <main>
                 <div id="terminal-main" tabindex="0">
                     <div id="terminal-main-history">
+                        <pre class="welcome">
+    <span class="token comment">   ___           ___           ___           ___                       ___      <span class="token title important">     ___     </span>      ___ </span>
+    <span class="token comment">  /\  \         /\  \         /\  \         /\__\          ___        /\__\     <span class="token title important">    /\  \    </span>     /\__\</span>
+    <span class="token comment">  \:\  \       /::\  \       /::\  \       /::|  |        /\  \      /::|  |    <span class="token title important">   /::\  \   </span>    /:/  /</span>
+    <span class="token comment">   \:\  \     /:/\:\  \     /:/\:\  \     /:|:|  |        \:\  \    /:|:|  |    <span class="token title important">  /:/\:\  \  </span>   /:/  / </span>
+    <span class="token comment">   /::\  \   /::\~\:\  \   /::\~\:\  \   /:/|:|__|__      /::\__\  /:/|:|  |__  <span class="token title important"> /::\~\:\  \ </span>  /:/  /  </span>
+    <span class="token comment">  /:/\:\__\ /:/\:\ \:\__\ /:/\:\ \:\__\ /:/ |::::\__\  __/:/\/__/ /:/ |:| /\__\ <span class="token title important">/:/\:\ \:\__\</span> /:/__/   </span>
+    <span class="token comment"> /:/  \/__/ \:\~\:\ \/__/ \/_|::\/:/  / \/__/~~/:/  / /\/:/  /    \/__|:|/:/  / <span class="token title important">\/__\:\/:/  /</span> \:\  \   </span>
+    <span class="token comment">/:/  /       \:\ \:\__\      |:|::/  /        /:/  /  \::/__/         |:/:/  /  <span class="token title important">     \::/  / </span>  \:\  \  </span>
+    <span class="token comment">\/__/         \:\ \/__/      |:|\/__/        /:/  /    \:\__\         |::/  /   <span class="token title important">     /:/  /  </span>   \:\  \ </span>
+    <span class="token comment">               \:\__\        |:|  |         /:/  /      \/__/         /:/  /    <span class="token title important">    /:/  /   </span>    \:\__\</span>
+    <span class="token comment">                \/__/         \|__|         \/__/                     \/__/     <span class="token title important">    \/__/    </span>     \/__/</span>
+    <span class="token comment">_______________________________________________________________________________________________________</span>
+
+    Github: <a href="https://github.com/ZhengLinLei/paste-code">https://github.com/ZhengLinLei/paste-code</a>
+    Documentation: <a href="https://github.com/ZhengLinLei/paste-code/TERMINAL.md">https://github.com/ZhengLinLei/paste-code/TERMINAL.md</a>
+    
+    <span class="token comment">----------------</span>
+
+    Type "?help" for help, or "cls" to clear the terminal.
+    Type "exit" to close the terminal.
+
+    <span class="token comment">----------------</span>
+
+    <span class="token constant">Paste Code v2023-01-xx</span>
+    <span class="token constant">Author: <a href="https://github.com/ZhengLinLei">https://github.com/ZhengLinLei</a></span>
+
+                        </pre>
                     </div>
                     <div id="terminal-main-input">
                         <span class="token title important"><span class="token punctuation">@</span>User $ </span>
-                        <pre id="terminal-main-command">CANNOT BE USED YET!</pre><button id="terminal-caret" for="terminal-main-command">&nbsp;</button>
+                        <pre id="terminal-main-command"><span class="desktop-unshow"><span class="token constant">Only Keyboard Devices Supported</span></span></pre><button id="terminal-caret" class="no-select" for="terminal-main-command">&nbsp;</button>
                     </div>
                 </div>
                 <div id="terminal-fast-option">
-                    <a class="terminal-option" data-option="reset">[reset<span class="mobile-unshow"> options</span>]</a>
-                    <a class="terminal-option" data-option="clear">[clear<span class="mobile-unshow"> terminal</span>]</a>
-                    <a class="terminal-option" data-option="help">[help<span class="mobile-unshow"> commands</span>]</a>
-                    <a class="terminal-option" data-option="exit">[exit<span class="mobile-unshow"> terminal</span>]</a>
-                    <a class="terminal-option" data-option="add">[add<span class="mobile-unshow"> window</span>]</a>
-                    <a class="terminal-option" data-option="remove">[remove<span class="mobile-unshow"> window</span>]</a>
+                    <div id="scroll-width" class="scroll terminal-opt"></div>
+                    <a class="terminal-option" data-option="reset">[reset<span class="tablet-unshow"> options</span>]</a>
+                    <a class="terminal-option" data-option="clear">[clear<span class="tablet-unshow"> terminal</span>]</a>
+                    <a class="terminal-option" data-option="help">[help<span class="tablet-unshow"> commands</span>]</a>
+                    <a class="terminal-option" data-option="exit">[exit<span class="tablet-unshow"> terminal</span>]</a>
+                    <a class="terminal-option" data-option="add">[add<span class="tablet-unshow"> window</span>]</a>
+                    <a class="terminal-option" data-option="remove">[remove<span class="tablet-unshow"> window</span>]</a>
+                    <a class="terminal-option" data-option="import">[import<span class="tablet-unshow"> option</span>]</a>
+                    <a class="terminal-option" data-option="export">[export<span class="tablet-unshow"> option</span>]</a>
                 </div>
             </main>
         </div>
@@ -71,6 +103,7 @@
     <script src="./js/src/lzma.js"></script>
     <script src="./js/min/prism.min.js"></script>
     <!-- LZMA .min.js doesn't work in github server -->
+    <script src="./js/src/terminal.js"></script>
     <script src="./js/src/script.js"></script>
 </body>
 </html>

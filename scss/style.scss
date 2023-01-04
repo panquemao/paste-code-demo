@@ -9,7 +9,7 @@
     --innerPadd : 10px;
     // -------- Terminal
     --termSize : 45%;
-    --termOption : 10%;
+    --termOption : calc(10% +  50px);
     // Mobile query
     @media screen and (max-width: 600px){
         --termOption : 20%;
@@ -26,7 +26,14 @@
     // font-size: 1.05em;
     font-size: var(--font-size);
 }
-
+.scroll{
+    opacity: 0;
+    background-color: rgba(#000000, 1);
+    z-index: 99;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
 .no-select {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */
@@ -102,6 +109,12 @@ body{
             div#terminal{
                 background-color: #000000;
                 border-top: 2px solid #ffffff;
+                #scroll-height{
+                    width: 100%;
+                    height: 5px;
+                    transform: translateY(-2px);
+                    cursor: ns-resize;
+                }
                 > header{
                     background-color: rgb(50, 50, 50);
                     border-bottom: .5px solid rgba(#fff, 0.3);
@@ -115,6 +128,13 @@ body{
                 }
                 > main{
                     > #terminal-fast-option{
+                        #scroll-width{
+                            height: 100%;
+                            width: 5px;
+                            transform: translateX(-1px);
+                            cursor: ew-resize;
+                        }
+                        position: relative;
                         border-left: .5px solid rgba(#fff, 0.3);
                         background-color: rgb(50, 50, 50);
                     }
@@ -213,7 +233,7 @@ body{
             &.open{
                 display: block;
             }
-            flex: 1;
+            // flex: 1;
             display: none;
             height: var(--termSize);
             border-top: 2px solid #000000;
@@ -251,11 +271,13 @@ body{
                 padding: 25px 0 0 0;
                 > #terminal-main{
                     width: calc(100% - var(--termOption));
-                    padding: 10px;
+                    overflow: auto;
+                    padding: 10px 10px 100px 10px;
                     &:focus{
                         outline: none;
                     }
                     #terminal-main-input{
+                        position: relative;
                         #terminal-main-command{
                             display: inline;
                             word-break: break-all;
@@ -265,13 +287,14 @@ body{
                         #terminal-caret{
                             padding: 0;
                             outline: none;
-                            border: 1px solid rgba(0, 0, 0, 1);
+                            // border: none;
+                            border: .5px solid rgba(0, 0, 0, 1);
                             outline: none;
                             background-color: transparent;
                             display: inline-block;
-                            font-family: monospace;
-                            width: 8px;
                             height: 100%;
+                            color: transparent;
+                            // width: calc(var(--font-size)/2);
                             &:hover{
                                 background-color: transparent;
                             }
@@ -361,8 +384,13 @@ body{
             display: none;
         }
     }
-    @media only screen and (min-width: 600px) {
+    @media only screen and (min-width: 1300px) {
         .desktop-unshow{
+            display: none;
+        }
+    }
+    @media only screen and (min-width: 600px) and (max-width: 1300px) {
+        .tablet-unshow{
             display: none;
         }
     }

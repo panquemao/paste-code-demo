@@ -1,5 +1,55 @@
 // Tab Size: Default 4
 
+/* ==============================================================  
+
+    ██████╗ ███████╗███████╗████████╗███████╗    ███████╗███████╗██████╗ ███████╗
+    ██╔══██╗██╔══██║██╔════╝   ██╔══╝██╔════╝    ██╔════╝██╔══██║██╔══██╗██╔════╝
+    ██████╔╝███████║███████╗   ██║   █████╗      ██║     ██║  ██║██║  ██║█████╗
+    ██╔═══╝ ██╔══██║╚════██║   ██║   ██╔══╝      ██║     ██║  ██║██║  ██║██╔══╝
+    ██║     ██║  ██║███████║   ██║   ███████╗    ███████╗███████║██████╔╝███████╗ 
+    ╚═╝     ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝    ╚══════╝╚══════╝╚═════╝ ╚══════╝
+
+    ██████╗ ███████╗███████╗███████╗███████╗██████╗ ███████╗
+    ██╔══██╗██╔════╝██╔════╝██╔════╝██╔════╝██╔══██╗██╔════╝
+    ██████╔╝█████╗  █████╗  ███████╗█████╗  ██████╔╝███████╗
+    ██╔═══╝ ██╔══╝  ██╔══╝  ╚════██║██╔══╝  ██╔══██╗╚════██║
+    ██║     ███████╗███████╗███████║███████╗██║  ██║███████║
+    ╚═╝     ╚══════╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝
+
+
+    Author: Zheng Lin Lei
+    Email: zheng9112003@icloud.com
+    Github: https://github.com/ZhengLinLei
+
+    Project: Paste Code
+    Github: https://github.com/ZhengLinLei/paste-code
+
+
+    © 2022 ZhengLinLei <zheng9112003@icloud.com>
+
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+============================================================== */
+
+
 let setTabSize = (size) => {
     document.querySelectorAll('.textarea div pre code').forEach(textarea => {
         textarea.style.tabSize = `${(size != 0 ? size : 4)}`;
@@ -12,14 +62,7 @@ let setTabSize = (size) => {
 let tabSize = 4;
 
 // ==============================================================
-
 window.addEventListener('load', () => {
-    // ==== DARK MODE =========
-    // Check if dark mode is enabled
-    if (localStorage.getItem('dark') === 'true') {
-        document.body.classList.add('dark');
-    }
-
 
     // ==============================================================
     // === LZMA =========
@@ -117,14 +160,7 @@ window.addEventListener('load', () => {
     const addWindow = () => {
         if (WINDOW_CONFIG.current < WINDOW_CONFIG.max) {
             // Add window
-            // Create this structure
-            // <div>
-            //     <div class="line-numbers-rows"></div>
-            //     <textarea class="textarea-main" spellcheck="false" oninput="_update_code(this)"></textarea>
-            //     <pre aria-hidden="true">
-            //         <code></code>
-            //     </pre>
-            // </div>
+
 
             // Add window to array
             const windowParent = document.createElement('div');
@@ -194,10 +230,12 @@ window.addEventListener('load', () => {
                 // Select line
                 if (e.altKey && e.key == 'l' || e.altKey && e.keyCode == 76 || e.altKey && e.which == 76){
                     e.preventDefault();
-                    
-                    // Select all line from textarea
+
+                    // Select line
                     const start = newWindow.value.substring(0, newWindow.selectionStart).lastIndexOf("\n") + 1;
-                    const end = newWindow.value.substring(newWindow.selectionEnd).indexOf("\n") + newWindow.selectionEnd;
+                    let end = newWindow.value.substring(newWindow.selectionEnd).indexOf("\n") + newWindow.selectionEnd;
+                    end += end == newWindow.value.length-1 ? 1 : 0;
+
                     newWindow.setSelectionRange(start, end);
                 }
                 // // Move line up and the line above down
@@ -300,6 +338,8 @@ window.addEventListener('load', () => {
     const closeOffer = () =>  document.querySelector("body > footer").classList.remove("text-offer");
 
     // ==== MAIN =========
+    // Global MAIN variables
+    let _toggle_terminal;
     const __main__ = () => {
         // Open Terminal
         window.addEventListener('keydown', (e) => {
@@ -377,7 +417,7 @@ window.addEventListener('load', () => {
 
 
         // ==== TERMINAL =========
-        const _toggle_terminal = (type="toggle") => {
+        _toggle_terminal = (type="toggle") => {
             switch (type) {
                 case "open":
                     document.querySelector('#terminal').classList.add('open');
@@ -391,19 +431,22 @@ window.addEventListener('load', () => {
                     terminal.focus();
                     break;
             }
+
+            // Save to local storage
+            localStorage.setItem('terminal', document.querySelector('#terminal').classList.contains('open') ? true : false);
             
         }
 
         const _option_click = (e) => {
             switch (e) {
                 case "add":
-                    addWindow();
+                    _TERMINAL.exec('window add 1');
                     break;
                 case "remove":
-                    removeWindow();
+                    _TERMINAL.exec('window remove 1');
                     break;
                 case "exit":
-                    _toggle_terminal("close");
+                    _TERMINAL.exec('terminal close');
                     break;
 
             }
@@ -412,6 +455,9 @@ window.addEventListener('load', () => {
         const terminal = document.querySelector('#terminal-main');
         const terminalInput = document.querySelector('#terminal-main-command');
         const terminalCaret = document.querySelector('#terminal-caret');
+        const TERMINAL_CONFIG = {
+            position: 0,
+        }
 
         document.querySelector('#open-t').addEventListener('click', () => _toggle_terminal("open"));
         document.querySelector('#close-t').addEventListener('click', () => _toggle_terminal("close"));
@@ -425,11 +471,27 @@ window.addEventListener('load', () => {
 
                 // Write inside terminalInput
                 if(e.key.length == 1){
-                    terminalInput.innerText += e.key;
+                    TERMINAL_CONFIG.position += 1;
+                    terminalInput.innerText = terminalInput.innerText.slice(0, TERMINAL_CONFIG.position-1) + e.key + terminalInput.innerText.slice(TERMINAL_CONFIG.position-1);
                 }
             }
 
             // ==== OPTIONS ====
+            // Move caret
+            if (e.key == "ArrowLeft") 
+                TERMINAL_CONFIG.position -= (TERMINAL_CONFIG.position > 0) ? 1 : 0;
+
+            if (e.key == "ArrowRight") 
+                TERMINAL_CONFIG.position += (TERMINAL_CONFIG.position < terminalInput.innerText.length) ? 1 : 0;
+
+            if(e.key == "ArrowLeft" || e.key == "ArrowRight"){
+                // Move caret css
+                let fs = terminalCaret.getBoundingClientRect().width                                                   // - caret width           
+                        - (parseFloat(getComputedStyle(terminalCaret,null).getPropertyValue('border-left-width'))*2)   // - border
+                        - 0.00001;                                                                                      // - Error                       
+
+                terminalCaret.style.transform = `translateX(-${((terminalInput.innerText.length - TERMINAL_CONFIG.position) * fs)}px)`;
+            }
             // Paste
             if (e.key == "v" && (e.ctrlKey || e.metaKey)) {
                 navigator.clipboard.readText().then(text => {
@@ -437,12 +499,14 @@ window.addEventListener('load', () => {
                 });
             }
             // Backspace
-            if (e.key == "Backspace") {
-                terminalInput.innerText = terminalInput.innerText.slice(0, -1);
+            if (e.key == "Backspace" || e.key == "Delete") {
+                terminalInput.innerText = terminalInput.innerText.slice(0, TERMINAL_CONFIG.position-1) + terminalInput.innerText.slice(TERMINAL_CONFIG.position);
+                TERMINAL_CONFIG.position -= (TERMINAL_CONFIG.position == 0) ? 0 : 1;
             }
             // Enter
-            if (e.key == "Enter") {
-                alert('push')
+            if (e.key == "Enter" || e.key == "Return" || e.key == "NumpadEnter") {
+                _TERMINAL.exec(terminalInput.innerText);
+                console.log(terminalInput.innerText);
             }
         });
 
@@ -450,8 +514,53 @@ window.addEventListener('load', () => {
         document.querySelectorAll('.terminal-option').forEach(option => {
             option.addEventListener('click', () => _option_click(option.getAttribute('data-option')));
         });
-    };
 
+        document.querySelector('#scroll-height.terminal').addEventListener('drag', (e) => {
+            // Resize terminal height
+            (document.documentElement || document.querySelector(':root')).style.setProperty('--termSize', `${e.clientY}px`);
+        });
+        // ==== TERMINAL CLASS =========
+        const _TERMINAL = new Terminal(
+            {
+                terminal: {
+                    main: terminal,
+                    input: terminalInput,
+                    caret: terminalCaret,
+                    toggleFnc: _toggle_terminal,
+                    config: TERMINAL_CONFIG,
+                },
+                window: {
+                    add: addWindow,
+                    remove: removeWindow,
+                }
+            }
+        );
+    };
+    // ==== LOAD CONFIGURATION =========
+    const _load_config = () => {
+        // ==== DARK MODE =========
+        // Check if dark mode is enabled
+        if (localStorage.getItem('dark') === 'true') {
+            document.body.classList.add('dark');
+        }
+
+        // Check terminal position
+        if (localStorage.getItem('terminalHeight')){
+            // Resize terminal height
+            (document.documentElement || document.querySelector(':root')).style.setProperty('--termSize', `${100 * parseFloat(localStorage.getItem('terminalHeight'))}%`);
+        }
+
+        if (localStorage.getItem('terminalOptWidth')){
+            // Resize terminal option width
+            (document.documentElement || document.querySelector(':root')).style.setProperty('--termOption', `${100 * parseFloat(localStorage.getItem('terminalOptWidth'))}%`);
+        }
+
+        // Check if terminal is open
+        if (localStorage.getItem('terminal') === 'true') {
+            _toggle_terminal('open');
+        }
+
+    }
 
 
 
@@ -461,6 +570,8 @@ window.addEventListener('load', () => {
         if (base64.length == 0 || base64 == "undefined" || !fetch){
             // RUN MAIN
             __main__();
+            // ==== LOAD CONFIGURATION =========
+            _load_config();
             return;
         }
         // Decode base64
