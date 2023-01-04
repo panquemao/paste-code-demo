@@ -437,22 +437,54 @@ window.addEventListener('load', () => {
             
         }
 
+        const _ExecPush = (command) => {
+            // History pos reset
+            TERMINAL_CONFIG.historyPosition = 0;
+
+            _TERMINAL.exec(command)
+            .then((res) => {
+                // Add input to history
+                let _input = document.createElement('div');
+                _input.classList.add('terminal-input');
+                _input.innerHTML = document.querySelector('#terminal-main-input').innerHTML;
+                terminalOutput.appendChild(_input);
+
+                // Remove button
+                _input.removeChild(_input.querySelector('button'));
+
+                // Clear input
+                TERMINAL_CONFIG.position = 0;
+                terminalInput.innerHTML = "";
+
+                if(!res[0] || res[1].length > 0){
+                    // Write outpur
+                    let _output = document.createElement('div');
+                    _output.classList.add('terminal-output');
+                    _output.innerHTML = res[1];
+                    terminalOutput.appendChild(_output);
+                }
+            });
+        }
+
         const _option_click = (e) => {
             switch (e) {
                 case "add":
-                    _TERMINAL.exec('window add 1');
+                    _ExecPush('window add 1');
                     break;
                 case "remove":
-                    _TERMINAL.exec('window remove 1');
+                    _ExecPush('window remove 1');
                     break;
                 case "exit":
-                    _TERMINAL.exec('terminal close');
+                    _ExecPush('terminal close');
                     break;
                 case "clear":
-                    _TERMINAL.exec('cls');
+                    _ExecPush('cls');
                     break;
                 case "help":
-                    _TERMINAL.exec('?help');
+                    _ExecPush('?help');
+                    break;
+                case "reset":
+                    _ExecPush('reset');
                     break;
             }
         }
@@ -525,32 +557,7 @@ window.addEventListener('load', () => {
             }
             // Enter
             if (e.key == "Enter" || e.key == "Return" || e.key == "NumpadEnter") {
-                // History pos reset
-                TERMINAL_CONFIG.historyPosition = 0;
-
-                _TERMINAL.exec(terminalInput.innerText)
-                .then((res) => {
-                    // Add input to history
-                    let _input = document.createElement('div');
-                    _input.classList.add('terminal-input');
-                    _input.innerHTML = document.querySelector('#terminal-main-input').innerHTML;
-                    terminalOutput.appendChild(_input);
-
-                    // Remove button
-                    _input.removeChild(_input.querySelector('button'));
-
-                    // Clear input
-                    TERMINAL_CONFIG.position = 0;
-                    terminalInput.innerHTML = "";
-
-                    if(!res[0] || res[1].length > 0){
-                        // Write outpur
-                        let _output = document.createElement('div');
-                        _output.classList.add('terminal-output');
-                        _output.innerHTML = res[1];
-                        terminalOutput.appendChild(_output);
-                    }
-                })
+                _ExecPush(terminalInput.innerText);
             }
         });
 

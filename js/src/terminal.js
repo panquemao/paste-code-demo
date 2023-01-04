@@ -98,6 +98,7 @@ class Terminal{
         cls: 0,
         exit: 0,
         "?help": 0,
+        reset: 0,
     }
     // Execution
     exec = (arg) => {
@@ -150,6 +151,17 @@ class Terminal{
         },
         "?help": () => {
             return [1, this.help]
+        },
+        "reset": ()=>{
+            localStorage.clear();
+
+            return [1, 
+                `
+                <div>
+                    <span>Reload required <a href="javascript:location.reload()">[yes]</a><a>[no]</a</span>
+                </div>
+                `
+            ];
         }
     }
 
