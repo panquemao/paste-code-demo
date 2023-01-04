@@ -56,6 +56,37 @@
 class Terminal{
     #hash; // Hash of the terminal
     #history = []; // History of the terminal
+    help = `
+        <div>
+            <pre>
+<span class="token comment">-----------------------------</span>
+    <span class="class-name token">Commands:</span>
+        - window <add | remove> [:int]
+            usage:
+                window add 3
+        
+        - terminal <close | open>
+            usage:
+                terminal close
+        
+        - cls
+    
+        - exit
+    
+        - ?help
+    
+    <span class="class-name token">More info:</span>
+        <a href="https://github.com/ZhengLinLei/paste-code">https://github.com/ZhengLinLei/paste-code</a>
+    
+    <span class="class-name token">Issues:</span>
+        <a href="https://github.com/ZhengLinLei/paste-code/issues">https://github.com/ZhengLinLei/paste-code/issues</a>
+    
+    <span class="class-name token">Author:</span>
+        <a href="https://github.com/ZhengLinLei">Zheng Lin Lei</a>
+<span class="token comment">-----------------------------</span>
+            </pre>
+        </div>
+    `;
 
     constructor(opt){
         this.#hash = opt;
@@ -66,6 +97,7 @@ class Terminal{
         terminal: ["close", "open"],
         cls: 0,
         exit: 0,
+        "?help": 0,
     }
     // Execution
     exec = (arg) => {
@@ -106,15 +138,18 @@ class Terminal{
 
             return [1, ""];
         },
-        "exit": (opt) => {
+        "exit": () => {
             this.#hash.terminal.toggleFnc('close');
 
             return [1, ""];
         },
-        "cls": (opt) => {
+        "cls": () => {
             this.#hash.terminal.output.innerHTML = "";
 
             return [1, ""];
+        },
+        "?help": () => {
+            return [1, this.help]
         }
     }
 

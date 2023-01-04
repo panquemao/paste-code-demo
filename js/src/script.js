@@ -451,7 +451,9 @@ window.addEventListener('load', () => {
                 case "clear":
                     _TERMINAL.exec('cls');
                     break;
-
+                case "help":
+                    _TERMINAL.exec('?help');
+                    break;
             }
         }
 
