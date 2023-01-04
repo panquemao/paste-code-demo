@@ -458,8 +458,10 @@ window.addEventListener('load', () => {
         const terminal = document.querySelector('#terminal-main');
         const terminalInput = document.querySelector('#terminal-main-command');
         const terminalCaret = document.querySelector('#terminal-caret');
+        const terminalOutput = document.querySelector('#terminal-main-history');
         const TERMINAL_CONFIG = {
             position: 0,
+            historyPosition: 0,
         }
 
         document.querySelector('#open-t').addEventListener('click', () => _toggle_terminal("open"));
@@ -495,6 +497,19 @@ window.addEventListener('load', () => {
 
                 terminalCaret.style.transform = `translateX(-${((terminalInput.innerText.length - TERMINAL_CONFIG.position) * fs)}px)`;
             }
+            // History
+            if (e.key == "ArrowUp" || e.key == "ArrowDown") {
+                // History get
+                const history = _TERMINAL.getHistory();
+                console.log(history.length);
+                TERMINAL_CONFIG.historyPosition += (e.key == "ArrowUp") ? ((TERMINAL_CONFIG.historyPosition >= history.length) ? 0 : 1) : ((TERMINAL_CONFIG.historyPosition <= 0) ? 0 : -1);
+
+                // History pos
+                let _w = history[history.length - TERMINAL_CONFIG.historyPosition];
+                terminalInput.innerText = _w ? _w : "";
+                TERMINAL_CONFIG.position = terminalInput.innerText.length;
+            }
+
             // Paste
             if (e.key == "v" && (e.ctrlKey || e.metaKey)) {
                 navigator.clipboard.readText().then(text => {
@@ -508,8 +523,32 @@ window.addEventListener('load', () => {
             }
             // Enter
             if (e.key == "Enter" || e.key == "Return" || e.key == "NumpadEnter") {
-                _TERMINAL.exec(terminalInput.innerText);
-                console.log(terminalInput.innerText);
+                // History pos reset
+                TERMINAL_CONFIG.historyPosition = 0;
+
+                _TERMINAL.exec(terminalInput.innerText)
+                .then((res) => {
+                    // Add input to history
+                    let _input = document.createElement('div');
+                    _input.classList.add('terminal-input');
+                    _input.innerHTML = document.querySelector('#terminal-main-input').innerHTML;
+                    terminalOutput.appendChild(_input);
+
+                    // Remove button
+                    _input.removeChild(_input.querySelector('button'));
+
+                    // Clear input
+                    TERMINAL_CONFIG.position = 0;
+                    terminalInput.innerHTML = "";
+
+                    if(!res[0] || res[1].length > 0){
+                        // Write outpur
+                        let _output = document.createElement('div');
+                        _output.classList.add('terminal-output');
+                        _output.innerHTML = res[1];
+                        terminalOutput.appendChild(_output);
+                    }
+                })
             }
         });
 
@@ -534,88 +573,68 @@ window.addEventListener('load', () => {
             }
             return {x, y};
         }
+        // Start resize
+        const _fncStartResize = (e, type) => {
+            let _Y = (type === "y");
+            // If the event is touchstart
+            let coords = _getXY(e);
+
+            let _PARENT = (_Y) ? terminal.parentElement.parentElement : document.querySelector('#terminal-fast-option');
+            // Resize terminal height
+            let _MAX = _Y ? window.innerHeight * 0.8 : window.innerWidth * 0.5;
+            let _MIN = _Y ? window.innerHeight * 0.2 : window.innerWidth * 0.1;
+            let _SIZE = _PARENT.getBoundingClientRect()[_Y ? "height" : "width"];
+            let _START = coords[type];
+            
+            const fncTouch = (e2) => {
+
+                // Remove if the event is passive
+                if(!['touchstart', 'touchmove', 'touchend', 'touchcancel'].includes(e.type)){
+                    e2.preventDefault();
+                }
+                
+                // If the event is touchstart
+                let coordsM = _getXY(e2);
+
+                document.body.classList.add(_Y ? 'row-resize' : 'col-resize');
+
+                let _NEW_SIZE = _SIZE - (coordsM[type] - _START); // - (e.clientY - _START); ---> Because the height grows from bottom to top
+
+                if(_NEW_SIZE > _MIN && _NEW_SIZE < _MAX)
+                    (_Y) 
+                    ?
+                        _PARENT.style.height = `${_NEW_SIZE}px`
+                    :
+                        (document.documentElement || document.querySelector(':root')).style.setProperty('--termOption', `${_NEW_SIZE}px`);
+            }
+            window.onmousemove = fncTouch;
+            window.ontouchmove = fncTouch;
+
+            window.onmouseup = () => _fncEndResize(type);
+            window.ontouchend = () => _fncEndResize(type);
+        };
+        // End resize
+        const _fncEndResize = (type) => {
+            let _Y = (type === "y");
+
+            document.body.classList.remove(_Y ? 'row-resize' : 'col-resize');
+
+            window.onmousemove = null;
+            window.ontouchmove = null;
+            window.onmouseup = null;
+            window.ontouchend = null;
+
+            // Save terminal height and option width
+
+            localStorage.setItem(
+                _Y ? 'terminalHeight' : 'terminalOptWidth',
+                _Y ? terminal.parentElement.parentElement.getBoundingClientRect().height : document.querySelector('#terminal-fast-option').getBoundingClientRect().width
+            );
+        };
+        
         ['mousedown','touchstart'].forEach( evt => {
-            document.querySelector('#scroll-height.terminal').addEventListener(evt, (e) => {
-                // If the event is touchstart
-                let coords = _getXY(e);
-    
-                let _PARENT = terminal.parentElement.parentElement;
-                // Resize terminal height
-                let _MAX = window.innerHeight * 0.8;
-                let _MIN = window.innerHeight * 0.2;
-                let _HEIGHT = _PARENT.getBoundingClientRect().height;
-                let _START = coords.y;
-                
-                const fncTouch = (e) => {
-
-                    // Remove if the event is passive
-                    if(!['touchstart', 'touchmove', 'touchend', 'touchcancel'].includes(e.type)){
-                        e.preventDefault();
-                    }
-                    
-                    // If the event is touchstart
-                    let coordsM = _getXY(e);
-
-                    document.body.classList.add('row-resize');
-    
-                    let _NEW_HEIGHT = _HEIGHT - (coordsM.y - _START); // - (e.clientY - _START); ---> Because the height grows from bottom to top
-    
-                    if(_NEW_HEIGHT > _MIN && _NEW_HEIGHT < _MAX){
-                        _PARENT.style.height = `${_NEW_HEIGHT}px`;
-                    }
-                }
-                window.onmousemove = fncTouch;
-                window.ontouchmove = fncTouch;
-            });
-
-            document.querySelector('#scroll-width.terminal-opt').addEventListener(evt, (e) => {
-                // If the event is touchstart
-                let coords = _getXY(e);
-
-                let _PARENT = document.querySelector('#terminal-fast-option');
-                // Resize terminal height
-                let _MAX = window.innerWidth * 0.5;
-                let _MIN = window.innerWidth * 0.1;
-                let _WIDTH = _PARENT.getBoundingClientRect().width;
-                let _START = coords.x;
-
-
-                const fncTouch = (e) => {
-                    
-                    // Remove if the event is passive
-                    if(!['touchstart', 'touchmove', 'touchend', 'touchcancel'].includes(e.type)){
-                        e.preventDefault();
-                    }
-
-                    // If the event is touchstart
-                    let coordsM = _getXY(e);
-
-                    document.body.classList.add('col-resize');
-    
-                    let _NEW_WIDTH = _WIDTH - (coordsM.x - _START); // - (e.clientX - _START) ---> Because the width grows from right to left
-    
-                    if(_NEW_WIDTH > _MIN && _NEW_WIDTH < _MAX){
-                        document.documentElement.style.setProperty('--termOption', `${_NEW_WIDTH}px`);
-                    }
-                }
-                
-                window.onmousemove = fncTouch;
-                window.ontouchmove = fncTouch;
-            });
-        });
-
-        ['mouseup','touchend'].forEach( evt => {
-            window.addEventListener(evt, (e) => {
-                document.body.classList.remove('row-resize');
-                document.body.classList.remove('col-resize');
-                window.onmousemove = null;
-                window.ontouchmove = null;
-
-
-                // Save terminal height and option width
-                localStorage.setItem('terminalHeight', terminal.parentElement.parentElement.getBoundingClientRect().height);
-                localStorage.setItem('terminalOptWidth', document.querySelector('#terminal-fast-option').getBoundingClientRect().width);
-            });
+            document.querySelector('#scroll-height.terminal').addEventListener(evt, (e) => _fncStartResize(e, "y"));
+            document.querySelector('#scroll-width.terminal-opt').addEventListener(evt, (e) => _fncStartResize(e, "x"));
         });
 
         // ==== TERMINAL CLASS =========
@@ -624,6 +643,7 @@ window.addEventListener('load', () => {
                 terminal: {
                     main: terminal,
                     input: terminalInput,
+                    output: terminalOutput,
                     caret: terminalCaret,
                     toggleFnc: _toggle_terminal,
                     config: TERMINAL_CONFIG,

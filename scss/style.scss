@@ -313,6 +313,11 @@ body{
                             // }
                         }
                     }
+                    #terminal-main-history{
+                        > .terminal-input{
+                            display: flex;
+                        }
+                    }
                 }
                 > #terminal-fast-option{
                     #scroll-width{

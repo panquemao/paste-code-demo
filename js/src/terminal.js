@@ -55,6 +55,7 @@
 
 class Terminal{
     #hash; // Hash of the terminal
+    #history = []; // History of the terminal
 
     constructor(opt){
         this.#hash = opt;
@@ -67,22 +68,23 @@ class Terminal{
         exit: 0,
     }
     // Execution
-    exec(arg){
-        let args = arg.split(" ");
+    exec = (arg) => {
+        return new Promise((resolve) => {
+            let args = arg.split(" ");
 
-        if(Object.keys(this.commands).includes(args[0])){
-            if(this.commands[args[0]] == 0 || this.commands[args[0]].includes(args[1])){
-                this.#hash.terminal.config.position = 0;
-                this.#hash.terminal.input.innerHTML = "";
+            this.#history.push(arg);
 
-                return this.execution[args[0]](args);
+            if(Object.keys(this.commands).includes(args[0])){
+                if(this.commands[args[0]] == 0 || this.commands[args[0]].includes(args[1])){
+                    resolve(this.execution[args[0]](args));
+                }
+
+                resolve([0, `Path "${args[1]}" not found`]);
             }
 
-            return [0, `Path ${args[1]} not found`];
-        }
-
-        return [0, `Command ${args[0]} not found`];
-    }
+            resolve([0, `Command "${args[0]}" not found`]);
+        });
+    };
 
     // terminal
     execution = {
@@ -110,9 +112,13 @@ class Terminal{
             return [1, ""];
         },
         "cls": (opt) => {
-            this.#hash.terminal.main.querySelector("#terminal-main-history").innerHTML = "";
+            this.#hash.terminal.output.innerHTML = "";
 
             return [1, ""];
         }
+    }
+
+    getHistory(){
+        return this.#history;
     }
 }
