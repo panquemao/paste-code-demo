@@ -60,6 +60,8 @@ let setTabSize = (size) => {
 
 };
 let tabSize = 4;
+// Theme list
+const ThemeArr = ['light', 'dark', 'funky', 'twilight', 'solarized', 'night'];
 
 // ==============================================================
 window.addEventListener('load', () => {
@@ -348,20 +350,30 @@ window.addEventListener('load', () => {
                 _toggle_terminal();
             }
         });
+
+        const _setTheme = (theme) => {
+
+            if (!ThemeArr.includes(theme)) theme = ThemeArr[0];
+
+            // Remove all themes
+            document.body.classList.remove(...ThemeArr);
+            // Set theme
+            document.body.classList.add(theme);
+
+            // Save to local storage
+            localStorage.setItem('theme', theme);
+        }
         // Invert color
         const invert = document.querySelector('.invert-color');
         // Toggle invert color
         invert.addEventListener('click', () => {
-            document.body.classList.toggle('dark');
-
-            // Save to local storage
             if(document.body.classList.contains('dark')) {
-                localStorage.setItem('dark', true);
+                _setTheme('light');
 
                 return;
             }
 
-            localStorage.setItem('dark', false);
+            _setTheme('dark');
         });
 
         // If the url hasn't generated any, create one
@@ -542,7 +554,7 @@ window.addEventListener('load', () => {
             if (e.key == "ArrowUp" || e.key == "ArrowDown") {
                 // History get
                 const history = _TERMINAL.getHistory();
-                console.log(history.length);
+
                 TERMINAL_CONFIG.historyPosition += (e.key == "ArrowUp") ? ((TERMINAL_CONFIG.historyPosition >= history.length) ? 0 : 1) : ((TERMINAL_CONFIG.historyPosition <= 0) ? 0 : -1);
 
                 // History pos
@@ -668,6 +680,10 @@ window.addEventListener('load', () => {
                 window: {
                     add: addWindow,
                     remove: removeWindow,
+                },
+                theme: {
+                    list: ThemeArr,
+                    set: _setTheme,
                 }
             }
         );
@@ -676,8 +692,8 @@ window.addEventListener('load', () => {
     const _load_config = () => {
         // ==== DARK MODE =========
         // Check if dark mode is enabled
-        if (localStorage.getItem('dark') === 'true') {
-            document.body.classList.add('dark');
+        if (localStorage.getItem('theme')) {
+            document.body.classList.add(localStorage.getItem('theme'));
         }
 
         // Check terminal position
@@ -702,22 +718,32 @@ window.addEventListener('load', () => {
         }
 
         // Check if terminal is open
-        if (localStorage.getItem('terminal') === 'true') {
+        if (localStorage.getItem('terminal') == 'true') {
             _toggle_terminal('open');
         }
 
+        // Font size
+        if (localStorage.getItem('fontSize')){
+            let size = parseFloat(localStorage.getItem('fontSize'));
+            console.log(size);
+            if(size >= 5 && size <= 35)
+                (document.documentElement || document.querySelector(':root')).style.setProperty('--font-size', `${size}px`);
+        }
     }
 
 
 
     // ==== INIT =========
     fn = async () => {
-        let base64 = location.hash.substring(1);
-        if (base64.length == 0 || base64 == "undefined" || !fetch){
+        const compile = () => {
             // RUN MAIN
             __main__();
             // ==== LOAD CONFIGURATION =========
             _load_config();
+        }
+        let base64 = location.hash.substring(1);
+        if (base64.length == 0 || base64 == "undefined" || !fetch){
+            compile();
             return;
         }
         // Decode base64
@@ -749,8 +775,7 @@ window.addEventListener('load', () => {
                     alert("Failed to writing data: " + error);
                 }
 
-                // RUN MAIN
-                __main__();
+                compile();
             });
         };
         reader.readAsArrayBuffer(blob);

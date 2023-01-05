@@ -61,14 +61,30 @@ class Terminal{
             <pre>
 <span class="token comment">-----------------------------</span>
     <span class="class-name token">Commands:</span>
-        - window <add | remove> [:int]
+        - window [add | remove] [:int]
             usage:
                 window add 3
         
-        - terminal <close | open>
+        - terminal [close | open]
             usage:
                 terminal close
         
+        - terminal [color | bg] [set | get | reset] [:hex | :rgb | :hsl]    (not implemented)
+            usage:
+                terminal color set #fff
+        
+        - config [set | get | reset]
+            usage:
+                config get
+
+        - font [set | get | reset] [:int]
+            usage:
+                font set +3
+
+        - theme [set | get | reset | list] [:string]
+            usage:
+                theme set dark
+
         - cls
     
         - exit
@@ -99,6 +115,8 @@ class Terminal{
         exit: 0,
         help: 0,
         config: ["set", "get", "reset"],
+        font: ["set", "get", "reset"],
+        theme: ["set", "get", "reset", "list"],
     }
     // Execution
     exec = (arg) => {
@@ -183,7 +201,8 @@ class Terminal{
                         terminal : localStorage.getItem("terminal") || false,
                         terminalHeight: localStorage.getItem("terminalHeight") || "default",
                         terminalOptWidth: localStorage.getItem("terminalOptWidth") || "default",
-                        dark: localStorage.getItem("dark") || false,
+                        fontSize: localStorage.getItem("fontSize") || "default",
+                        theme: localStorage.getItem("theme") || "default",                        
                     }
 
                     result = [1, 
@@ -202,6 +221,69 @@ class Terminal{
                     localStorage.clear();
                     break;
             }
+            return result;
+        },
+        "font": (opt) => {
+            let result = [1, ""], root = document.documentElement || document.querySelector(':root');
+            let newFontSize = parseInt(window.getComputedStyle(root, null).getPropertyValue('font-size').replace("px", ""));
+
+            switch (opt[1]) {
+                case "set":
+                    if(opt[2].match(/[-+]/)){
+                        // Get current font size
+                        let currentFontSize = newFontSize;
+
+                        // Get the value
+                        let value = parseInt(opt[2]);
+
+                        // Set the new font size
+                        newFontSize = currentFontSize + value;
+                    }else
+                        newFontSize = parseInt(opt[2]);
+
+                break;
+
+                case "get":
+                    result = [1, `<div><span>Font size: <span class="token comment">${newFontSize}px</span></span></div>`];
+                break;
+
+                case "reset":
+                    newFontSize = 12;
+                break;
+            }
+
+            if(opt[1] != "get")
+                root.style.setProperty('--font-size', `${newFontSize}px`);
+
+                // Save to local storage
+                localStorage.setItem("fontSize", newFontSize);
+
+            return result;
+        },
+        "theme": (opt) => {
+            let result = [1, ""];
+            switch (opt[1]) {
+                case "set":
+                    if(!this.#hash.theme.list.includes(opt[2])){
+                        result = [0, `Theme "${opt[2]}" not found`];
+                    }else{
+                        this.#hash.theme.set(opt[2]);
+                    }
+                    break;
+            
+                case "get":
+                    result = [1, `<div><span>Current theme: <span class="token comment">${(localStorage.getItem('theme') || this.#hash.theme.list[0])}</span></span></div>`];
+                    break;
+
+                case "reset":
+                    this.#hash.theme.set("light");
+                    break;
+
+                case "list":
+                    result = [1, `<div><span>Theme list: <span class="token comment">${this.#hash.theme.list.join(", ")}</span></span><p>See <a href="https://github.com/ZhengLinLei/paste-code/blob/main/THEME.md">https://github.com/ZhengLinLei/paste-code/blob/main/THEME.md</a> to customise themes.</div>`];
+                    break;
+            }
+
             return result;
         }
     }
