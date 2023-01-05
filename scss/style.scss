@@ -381,7 +381,7 @@ body{
             }
         }
     }
-    &.night{
+    &.night, &.zll{
         a{
             &:hover{
                 background: #999999;

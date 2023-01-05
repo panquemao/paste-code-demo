@@ -61,7 +61,7 @@ let setTabSize = (size) => {
 };
 let tabSize = 4;
 // Theme list
-const ThemeArr = ['light', 'dark', 'funky', 'twilight', 'solarized', 'night'];
+const ThemeArr = ['light', 'dark', 'funky', 'twilight', 'solarized', 'night', 'zll'];
 
 // ==============================================================
 window.addEventListener('load', () => {
