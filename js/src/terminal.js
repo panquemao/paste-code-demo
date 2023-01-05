@@ -73,7 +73,7 @@ class Terminal{
     
         - exit
     
-        - ?help
+        - help
     
     <span class="class-name token">More info:</span>
         <a href="https://github.com/ZhengLinLei/paste-code">https://github.com/ZhengLinLei/paste-code</a>
@@ -97,8 +97,8 @@ class Terminal{
         terminal: ["close", "open"],
         cls: 0,
         exit: 0,
-        "?help": 0,
-        reset: 0,
+        help: 0,
+        config: ["set", "get", "reset"],
     }
     // Execution
     exec = (arg) => {
@@ -146,22 +146,63 @@ class Terminal{
         },
         "cls": () => {
             this.#hash.terminal.output.innerHTML = "";
+            this.#hash.terminal.caret.style.transform = "translateX(0px)";
+            this.#hash.terminal.config.position = 0;
 
             return [1, ""];
         },
-        "?help": () => {
+        "help": () => {
             return [1, this.help]
         },
-        "reset": ()=>{
-            localStorage.clear();
-
-            return [1, 
+        "config": (opt)=>{
+            let data = {}, result = [1,
                 `
                 <div>
                     <span>Reload required <a href="javascript:location.reload()">[yes]</a><a>[no]</a</span>
                 </div>
                 `
             ];
+
+            switch (opt[1]) {
+                case "set":
+                    data = JSON.parse(opt.slice(2).join(""));
+
+                    Object.entries(data).forEach(([key, value]) => {
+                        if(value === "undefined" || value === "null" || value === "NaN") result = [0, `Invalid value ${value}`]; // Invalid value
+                        
+                        if(value != "default"){
+                            localStorage.setItem(key, value); // key - value
+                        }else{
+                            localStorage.removeItem(key);
+                        }
+                    })
+                    break;
+            
+                case "get":
+                    data = {
+                        terminal : localStorage.getItem("terminal") || false,
+                        terminalHeight: localStorage.getItem("terminalHeight") || "default",
+                        terminalOptWidth: localStorage.getItem("terminalOptWidth") || "default",
+                        dark: localStorage.getItem("dark") || false,
+                    }
+
+                    result = [1, 
+                        `
+                        <div>
+                            <pre><code class="language-json">${Prism.highlight(JSON.stringify(data, null, 4).trim(), Prism.languages.json, 'json')}</code></pre>
+                        </div>
+                        <div>
+                            <span>config set ${JSON.stringify(data)}</span>
+                        </div>
+                        `
+                    ]
+                    break;
+
+                case "reset":
+                    localStorage.clear();
+                    break;
+            }
+            return result;
         }
     }
 

@@ -14,7 +14,7 @@ Commands:
 
     - exit
 
-    - ?help
+    - help
 
 More info:
     https://github.com/ZhengLinLei/paste-code

@@ -437,11 +437,11 @@ window.addEventListener('load', () => {
             
         }
 
-        const _ExecPush = (command) => {
+        const _ExecPush = () => {
             // History pos reset
             TERMINAL_CONFIG.historyPosition = 0;
 
-            _TERMINAL.exec(command)
+            _TERMINAL.exec(terminalInput.innerText)
             .then((res) => {
                 // Add input to history
                 let _input = document.createElement('div');
@@ -463,30 +463,32 @@ window.addEventListener('load', () => {
                     _output.innerHTML = res[1];
                     terminalOutput.appendChild(_output);
                 }
+
+                // Scroll to bottom
+                terminal.scrollTop = terminal.scrollHeight;
             });
         }
 
         const _option_click = (e) => {
-            switch (e) {
-                case "add":
-                    _ExecPush('window add 1');
-                    break;
-                case "remove":
-                    _ExecPush('window remove 1');
-                    break;
-                case "exit":
-                    _ExecPush('terminal close');
-                    break;
-                case "clear":
-                    _ExecPush('cls');
-                    break;
-                case "help":
-                    _ExecPush('?help');
-                    break;
-                case "reset":
-                    _ExecPush('reset');
-                    break;
-            }
+            // Opt object
+            let opt = {
+                "add": ["window add 1", 1],
+                "remove": ["window remove 1", 1],
+                "exit": ["exit", 1],
+                "clear": ["cls", 1],
+                "help": ["help", 1],
+                "reset": ["config reset", 1],
+                "import": ["config set <span class='token comment'>JSON</span>", 0],
+                "export": ["config get", 1],
+            };
+            
+            // Set input
+            terminalInput.innerHTML = opt[e][0];
+            TERMINAL_CONFIG.position = terminalInput.innerText.length;
+
+            // Execute
+            if (opt[e][1])
+                _ExecPush();
         }
 
         const terminal = document.querySelector('#terminal-main');
@@ -502,7 +504,12 @@ window.addEventListener('load', () => {
         document.querySelector('#close-t').addEventListener('click', () => _toggle_terminal("close"));
 
         // Terminal input
-        terminal.addEventListener('focus', () => terminalCaret.classList.add('blink'));
+        terminal.addEventListener('focus', () => {
+            // Scroll to bottom
+            terminal.scrollTop = terminal.scrollHeight;
+            // Blink caret
+            terminalCaret.classList.add('blink');
+        });
         terminal.addEventListener('blur', () => terminalCaret.classList.remove('blink'));
         terminal.addEventListener('keydown', (e) => {
             if(!e.ctrlKey && !e.metaKey && !e.altKey){
@@ -547,7 +554,8 @@ window.addEventListener('load', () => {
             // Paste
             if (e.key == "v" && (e.ctrlKey || e.metaKey)) {
                 navigator.clipboard.readText().then(text => {
-                    terminalInput.innerText += text;
+                    terminalInput.innerText = terminalInput.innerText.slice(0, TERMINAL_CONFIG.position-1) + text + terminalInput.innerText.slice(TERMINAL_CONFIG.position-1);
+                    TERMINAL_CONFIG.position += text.length;
                 });
             }
             // Backspace
@@ -557,7 +565,7 @@ window.addEventListener('load', () => {
             }
             // Enter
             if (e.key == "Enter" || e.key == "Return" || e.key == "NumpadEnter") {
-                _ExecPush(terminalInput.innerText);
+                _ExecPush();
             }
         });
 
@@ -675,12 +683,22 @@ window.addEventListener('load', () => {
         // Check terminal position
         if (localStorage.getItem('terminalHeight')){
             // Resize terminal height
-            (document.documentElement || document.querySelector(':root')).style.setProperty('--termSize', `${parseFloat(localStorage.getItem('terminalHeight'))}px`);
+            let h = parseFloat(localStorage.getItem('terminalHeight'));
+            let _MAX = window.innerHeight * 0.8;
+            let _MIN = window.innerHeight * 0.2;
+
+            if(h > _MIN && h < _MAX)
+                (document.documentElement || document.querySelector(':root')).style.setProperty('--termSize', `${h}px`);
         }
 
         if (localStorage.getItem('terminalOptWidth')){
             // Resize terminal option width
-            (document.documentElement || document.querySelector(':root')).style.setProperty('--termOption', `${parseFloat(localStorage.getItem('terminalOptWidth'))}px`);
+            let w = parseFloat(localStorage.getItem('terminalOptWidth'));
+            let _MAX = window.innerWidth * 0.5;
+            let _MIN = window.innerWidth * 0.1;
+
+            if(w > _MIN && w < _MAX)
+                (document.documentElement || document.querySelector(':root')).style.setProperty('--termOption', `${w}px`);
         }
 
         // Check if terminal is open
