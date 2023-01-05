@@ -5,7 +5,8 @@
 Try it! [https://zhenglinlei.github.io/paste-code/](https://zhenglinlei.github.io/paste-code/)
 
 ### Updates
-* `2023 - 01 - 0x: ` Surprise! We have a new update! Customise your editor with the help of our inner terminal. You can use `help` to get more information. **(Not operative yet)**
+* `2023 - 01 - 05: ` Themes for everyone. Yeeeeeeeey 🙈 🙉 🙊 How to customise your theme? Just type `theme set <theme>` in the terminal. You can also use `theme list` to see all available themes.
+* `2023 - 01 - 04: ` Surprise! We have a new update! Customise your editor with the help of our inner terminal. You can use `help` to get more information. **(Not operative yet)**
 * `2023 - 01 - 02: ` New UI and funtionalities. Code line numbers and new Button Styles.
 
 ### Plain Text Editor
