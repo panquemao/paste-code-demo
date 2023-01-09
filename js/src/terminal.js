@@ -85,6 +85,10 @@ class Terminal{
             usage:
                 theme set dark
 
+        - run [:int (windows: 0-3, default: 0)]
+            usage:
+                run 1
+
         - execute [:int (windows: 0-3, default: 0)]
             usage:
                 execute 0
@@ -121,6 +125,7 @@ class Terminal{
         config: ["set", "get", "reset"],
         font: ["set", "get", "reset"],
         theme: ["set", "get", "reset", "list"],
+        run: 0,
         execute: 0
     }
     // Execution
@@ -295,9 +300,12 @@ class Terminal{
 
             return result;
         },
+        "run": (opt) => {
+
+
+        },
 
         "execute": (opt) => {
-
             if (opt.length > 1 && opt[1].includes('alert')){
                 if (opt[1].includes('disable')){
                     localStorage.setItem('disableAlertExec', true);
