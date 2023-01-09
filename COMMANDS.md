@@ -26,6 +26,10 @@ Commands:
         usage:
             theme set dark
 
+    - run [:int (windows: 0-3, default: 0)]
+        usage:
+            run 1
+
     - execute [:int (windows: 0-3, default: 0)]
         usage:
             execute 0

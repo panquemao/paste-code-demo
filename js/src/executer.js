@@ -49,7 +49,15 @@ class JSexecuter{
 
         let newScript = document.createElement('script');
         newScript.id = 'scriptContainer';
-        newScript.text = this.code;
+        newScript.text = 
+        `
+        try{
+            ${this.code}
+        }
+        catch(e){
+            Out(e);
+        }
+        `
         document.body.appendChild(newScript);
     }
 }
