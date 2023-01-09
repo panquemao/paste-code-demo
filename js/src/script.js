@@ -680,6 +680,7 @@ window.addEventListener('load', () => {
                 window: {
                     add: addWindow,
                     remove: removeWindow,
+                    config: WINDOW_CONFIG,
                 },
                 theme: {
                     list: ThemeArr,

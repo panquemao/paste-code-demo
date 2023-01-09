@@ -85,6 +85,10 @@ class Terminal{
             usage:
                 theme set dark
 
+        - execute [:int (windows: 0-3, default: 0)]
+            usage:
+                execute 0
+
         - cls
     
         - exit
@@ -117,6 +121,7 @@ class Terminal{
         config: ["set", "get", "reset"],
         font: ["set", "get", "reset"],
         theme: ["set", "get", "reset", "list"],
+        execute: 0
     }
     // Execution
     exec = (arg) => {
@@ -175,9 +180,11 @@ class Terminal{
         "config": (opt)=>{
             let data = {}, result = [1,
                 `
+                <br>
                 <div>
-                    <span>Reload required <a href="javascript:location.reload()">[yes]</a><a>[no]</a</span>
+                    <span>Reload required <a href="javascript:location.reload()">[yes]</a><a>[no]</a></span>
                 </div>
+                <br>
                 `
             ];
 
@@ -207,12 +214,14 @@ class Terminal{
 
                     result = [1, 
                         `
+                        <br>
                         <div>
                             <pre><code class="language-json">${Prism.highlight(JSON.stringify(data, null, 4).trim(), Prism.languages.json, 'json')}</code></pre>
                         </div>
                         <div>
                             <span>config set ${JSON.stringify(data)}</span>
                         </div>
+                        <br>
                         `
                     ]
                     break;
@@ -244,7 +253,7 @@ class Terminal{
                 break;
 
                 case "get":
-                    result = [1, `<div><span>Font size: <span class="token comment">${newFontSize}px</span></span></div>`];
+                    result = [1, `<br><div><span>Font size: <span class="token comment">${newFontSize}px</span></span></div><br>`];
                 break;
 
                 case "reset":
@@ -285,6 +294,72 @@ class Terminal{
             }
 
             return result;
+        },
+
+        "execute": (opt) => {
+
+            if (opt.length > 1 && opt[1].includes('alert')){
+                if (opt[1].includes('disable')){
+                    localStorage.setItem('disableAlertExec', true);
+                }else{
+                    localStorage.removeItem('disableAlertExec');
+                }
+
+                return [1, `
+                <br>
+                <div>
+                    <span>Alert <span class="token title important">warning</span> updated</span>
+                </div>
+                <div>
+                    <span class="token comment">Disable it with <span class="token operator">execute disable-alert</span>.<br> Or enable it with <span class="token operator">execute enable-alert</span></span>
+                </div>
+                <br>
+                `];
+
+            }else{
+                let i = opt[1] || 0;
+
+                let el = this.#hash.window.config.windows[i];
+                console.log(this.#hash.window.config.windows, el, i);
+
+                if(!el) return [0, `Window ${i} not found`];
+
+
+                // Create script
+                let scriptText = `
+                    function runModule(){
+                        ${el.value}
+                    }
+                `;
+
+                // Remove old one
+                if (document.getElementById('scriptContainer')) {
+                    document.getElementById('scriptContainer').parentNode.removeChild(document.getElementById('scriptContainer'));
+                }
+
+                let newScript = document.createElement('script');
+                newScript.id = 'scriptContainer';
+                newScript.text = scriptText;
+                document.body.appendChild(newScript);
+
+                // Run the script
+
+                if(!localStorage.getItem('disableAlertExec'))
+                    return [1, 
+                    `
+                        <br>
+                        <div>
+                            <span>This action could be dangerous. Are you sure you want to execute it? <a href="javascript:runModule()">[yes]</a><a>[no]</a></span>
+                        </div>
+                        <div>
+                            <span class="token comment">By the way you can disable this alert with <span class="token operator">execute disable-alert</span>.<br> Or enable it with <span class="token operator">execute enable-alert</span></span>
+                        </div>
+                        <br>
+                    `
+                    ];
+
+                return [1, runModule()];
+            }
         }
     }
 
