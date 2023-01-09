@@ -68,7 +68,7 @@ const ThemeArr = ['light', 'dark', 'funky', 'twilight', 'solarized', 'night', 'z
 let TMP_ID = 0;
 // Display Output
 function Out(str){
-    document.querySelector('#'+TMP_ID).innerHTML = str + "<br>";
+    document.querySelector('#'+TMP_ID).innerHTML += str + "<br>";
 }
 
 // ==============================================================

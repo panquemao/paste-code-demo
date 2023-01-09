@@ -306,6 +306,12 @@ class Terminal{
             return result;
         },
         "run": (opt) => {
+
+            // Return list
+            if (opt.length >= 2 && opt[1] == "list")
+                return [1, `<div><span>Executer supported languages: <span class="token comment">${Object.keys(this.executer).join(', ')}</span></span></div><br>`];
+
+
             let result = [0, `
                 <div>
                     <span>Language not found.</span>

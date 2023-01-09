@@ -6,7 +6,7 @@ Try it! [https://zhenglinlei.github.io/paste-code/](https://zhenglinlei.github.i
 
 ### Updates
 
-* `2023 - 01 - 09: ` New update! Have you ever dreamed to execute `javascript` in Paste Code? Now you can do it! Just type `execute` in the terminal. For example, if you want to execute `console.log('Hello World!')` in the window 0, you can write `execute 0` in the terminal.
+* `2023 - 01 - 09: ` New update! Have you ever dreamed to execute `javascript` in Paste Code? Now you can do it! Just type `execute` or `run` in the terminal. For example, if you want to execute `console.log('Hello World!')` in the window 0, you can write `execute 0` or `run 0` in the terminal.
 
 * `2023 - 01 - 05: ` Themes for everyone. Yeeeeeeeey 🙈 🙉 🙊 How to customise your theme? Just type `theme set <theme>` in the terminal. You can also use `theme list` to see all available themes.
 
