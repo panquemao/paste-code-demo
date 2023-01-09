@@ -452,8 +452,31 @@ class Terminal{
                         });
 
                         brainfuck.run(() => {
+                            let html = `
+                            <style>
+                            td{
+                                text-align: center;
+                                padding-right: 10px;
+                            }
+                            </style>
+                            <table>
+                                <tr>
+                            `;
+                            // Text
+                            arr.forEach(el => html += `<td>${el}</td>`);
+                            html += `
+                                </tr>
+                                <tr>
+                            `;
+                            // Num
+                            bf.forEach(el => html += `<td><span class="token comment">${el}</span></td>`);
+                            html += `
+                                </tr>
+                            </table>
+                            `;
+
+                            Out(html);
                             Out(arr.join(''));
-                            Out(`<span class="token comment">${bf.join(' ')}</span>`)
                         });
                     }
 
