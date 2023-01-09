@@ -114,7 +114,9 @@ class Terminal{
 
     executer = {
         python: "https://pyscript.net/latest/pyscript.js",
-        javascript: "./js/src/executer.js",
+        javascript: "./js/min/executer.min.js",
+        typescript: "https://unpkg.com/typescript@latest/lib/typescriptServices.js",
+        brainfuck: "./js/min/brainfuck.min.js",
     }
 
     constructor(opt){
@@ -325,6 +327,8 @@ class Terminal{
             let lang = {
                 "python" : ["python", "py"],
                 "javascript" : ["javascript", "js"],
+                "typescript" : ["typescript", "ts"],
+                "brainfuck" : ["brainfuck", "bf"],
             }
 
             let i = opt[1] || 0;
@@ -367,24 +371,40 @@ class Terminal{
             let tmp = `b${Math.random().toString(36).substring(7)}b`;
             TMP_ID = tmp;
 
-            this.#hash.terminal.output.innerHTML += `<div id="${tmp}"></div>`;
+            this.#hash.terminal.output.innerHTML += `<div id="${tmp}">Loading executer...</div>`;
 
+            function clearLoad(){
+                document.querySelector(`#${tmp}`).innerHTML = "";
+            }
+
+            // Remove first line in code
+            code = _LINES.slice(1).join('\n');
             // Action
             switch (langCode) {
                 case 'python':
                     // Change print to Out
                     code = code.replace(/print\(/g, "Out(");
 
-                    let elpy = document.createElement('py-script');
-                    elpy.style.opacity = 0;
-                    elpy.innerHTML = `
-                    from js import Out
+                    function executePY(el){
+                        let elpy = document.createElement('py-script');
+                        elpy.style.opacity = 0;
+                        elpy.innerHTML = `
+                        from js import Out
 
-                    ${code}
-                    `;
+                        ${code}
+                        `;
 
-                    // Append
-                    this.#hash.terminal.output.appendChild(elpy);
+                        // Append
+                        el.#hash.terminal.output.appendChild(elpy);
+                        clearLoad();
+                    }
+                    if(typeof pyscript === 'undefined')
+                        script.onload = () => {
+                            executePY(this);
+                        }
+                    else
+                        executePY(this);
+                
                     break;
 
                 case 'javascript':
@@ -393,7 +413,54 @@ class Terminal{
 
                     let runned = new JSexecuter(code);
                     runned.run();
-                
+
+                    break;
+
+                case 'typescript':
+                    // Change console.log to Out
+                    code = code.replace(/console.log\(/g, "Out(");
+
+                    function executeTS(){
+                        clearLoad();
+
+                        // Transpile
+                        let jsCode = window.ts.transpile(code);
+
+                        let runned = new JSexecuter(jsCode);
+                        runned.run();
+                    }
+                    if(!window.ts)
+                        script.onload = executeTS;
+                    else
+                        executeTS();
+                    
+                    break;
+
+                case 'brainfuck':
+
+                    let arr = [], bf = [];
+                    function executeBF(){
+                        let brainfuck = new Brainfuck(new Infinite());
+
+                        clearLoad();
+                        // console.log(output)
+                        brainfuck.code.source(code);
+
+                        brainfuck.onOutput(function (_o) {
+                            arr.push(String.fromCharCode(_o));
+                            bf.push(_o);
+                        });
+
+                        brainfuck.run(() => {
+                            Out(arr.join(''));
+                            Out(`<span class="token comment">${bf.join(' ')}</span>`)
+                        });
+                    }
+
+                    if(!window.Brainfuck)
+                        script.onload = executeBF;
+                    else
+                        executeBF();
             }
 
             return [1, ""];
