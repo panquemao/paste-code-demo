@@ -112,6 +112,11 @@ class Terminal{
         </div>
     `;
 
+    executer = {
+        python: "https://pyscript.net/latest/pyscript.js",
+        javascript: "./js/src/executer.js",
+    }
+
     constructor(opt){
         this.#hash = opt;
     }
@@ -301,8 +306,91 @@ class Terminal{
             return result;
         },
         "run": (opt) => {
+            let result = [0, `
+                <div>
+                    <span>Language not found.</span>
+                </div>
+                <div>
+                    <span>Example: <span class="token comment">!PY</span></span>
+                </div>
+            `];
 
 
+            let lang = {
+                "python" : ["python", "py"],
+                "javascript" : ["javascript", "js"],
+            }
+
+            let i = opt[1] || 0;
+
+            let el = this.#hash.window.config.windows[i];
+            if(!el) return [0, `Window ${i} not found`];
+
+            let code = el.value;
+
+            // Get first line of code
+            const _LINES = code.split('\n')
+            const firstLine = _LINES[0];
+            if(!firstLine.includes("!")) return result;
+
+            // Get language
+            let arr = firstLine.split('!');
+            const language = arr[arr.length-1].toLowerCase();  // Fixed ISSUE #8
+
+            // Get language code
+            let langCode = Object.entries(lang).find(([key, value]) => value.includes(language))[0];
+
+            if(!langCode) return [0, `Language "${language}" not executable. See <a href="https://github.com/ZhengLinLei/paste-code/blob/main/EXECUTER.md">https://github.com/ZhengLinLei/paste-code/blob/main/EXECUTER.md</a> for more information.`];
+
+            let url = this.executer[langCode];
+
+            // Check if <script src="url"></script> is already loaded
+            let script = document.querySelector(`script[src="${url}"]`);
+
+            if(!script){
+                script = document.createElement('script');
+                // Add defer and src
+                script.setAttribute('defer', 'true');
+                script.src = url;
+
+                // Add script to body to execute
+                document.body.appendChild(script);
+            }
+
+            // Generate random tmp string
+            let tmp = `b${Math.random().toString(36).substring(7)}b`;
+            TMP_ID = tmp;
+
+            this.#hash.terminal.output.innerHTML += `<div id="${tmp}"></div>`;
+
+            // Action
+            switch (langCode) {
+                case 'python':
+                    // Change print to Out
+                    code = code.replace(/print\(/g, "Out(");
+
+                    let elpy = document.createElement('py-script');
+                    elpy.style.opacity = 0;
+                    elpy.innerHTML = `
+                    from js import Out
+
+                    ${code}
+                    `;
+
+                    // Append
+                    this.#hash.terminal.output.appendChild(elpy);
+                    break;
+
+                case 'javascript':
+                    // Change console.log to Out
+                    code = code.replace(/console.log\(/g, "Out(");
+
+                    let runned = new JSexecuter(code);
+                    runned.run();
+                
+            }
+
+            return [1, ""];
         },
 
         "execute": (opt) => {
@@ -325,30 +413,36 @@ class Terminal{
                 `];
 
             }else{
+                if(typeof JSexecuter === 'undefined'){
+                    let script = document.createElement('script');
+                    // Add defer and src
+                    script.setAttribute('defer', 'true');
+                    script.src = this.executer.javascript;
+
+                    // Add script to body to execute
+                    document.body.appendChild(script);
+
+                    return [0, `Execution failed due: Script loading...; Please execute again <a>${opt.join(" ")}</a>`];
+                }
+
                 let i = opt[1] || 0;
 
                 let el = this.#hash.window.config.windows[i];
-                console.log(this.#hash.window.config.windows, el, i);
 
                 if(!el) return [0, `Window ${i} not found`];
-
 
                 // Create script
                 let scriptText = `
                     function runModule(){
                         ${el.value}
+
+                        return "Script Loaded";
                     }
                 `;
 
-                // Remove old one
-                if (document.getElementById('scriptContainer')) {
-                    document.getElementById('scriptContainer').parentNode.removeChild(document.getElementById('scriptContainer'));
-                }
+                let runned = new JSexecuter(scriptText);
+                runned.run();
 
-                let newScript = document.createElement('script');
-                newScript.id = 'scriptContainer';
-                newScript.text = scriptText;
-                document.body.appendChild(newScript);
 
                 // Run the script
 
@@ -365,8 +459,10 @@ class Terminal{
                         <br>
                     `
                     ];
-
-                return [1, runModule()];
+                    
+                return [1, `
+                <span class="comment token">${runModule()}</span>
+                `];
             }
         }
     }

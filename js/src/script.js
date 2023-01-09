@@ -2,6 +2,8 @@
 
 /* ==============================================================  
 
+    Paste Code - A simple code pasting tool for developers.
+
     ██████╗ ███████╗███████╗████████╗███████╗    ███████╗███████╗██████╗ ███████╗
     ██╔══██╗██╔══██║██╔════╝   ██╔══╝██╔════╝    ██╔════╝██╔══██║██╔══██╗██╔════╝
     ██████╔╝███████║███████╗   ██║   █████╗      ██║     ██║  ██║██║  ██║█████╗
@@ -62,6 +64,12 @@ let setTabSize = (size) => {
 let tabSize = 4;
 // Theme list
 const ThemeArr = ['light', 'dark', 'funky', 'twilight', 'solarized', 'night', 'zll'];
+
+let TMP_ID = 0;
+// Display Output
+function Out(str){
+    document.querySelector('#'+TMP_ID).innerHTML = str + "<br>";
+}
 
 // ==============================================================
 window.addEventListener('load', () => {
@@ -453,17 +461,18 @@ window.addEventListener('load', () => {
             // History pos reset
             TERMINAL_CONFIG.historyPosition = 0;
 
+            // Add input to history
+            let _input = document.createElement('div');
+            _input.classList.add('terminal-input');
+            _input.innerHTML = document.querySelector('#terminal-main-input').innerHTML;
+            terminalOutput.appendChild(_input);
+
+            // Remove button
+            _input.removeChild(_input.querySelector('button'));
+
+
             _TERMINAL.exec(terminalInput.innerText)
             .then((res) => {
-                // Add input to history
-                let _input = document.createElement('div');
-                _input.classList.add('terminal-input');
-                _input.innerHTML = document.querySelector('#terminal-main-input').innerHTML;
-                terminalOutput.appendChild(_input);
-
-                // Remove button
-                _input.removeChild(_input.querySelector('button'));
-
                 // Clear input
                 TERMINAL_CONFIG.position = 0;
                 terminalInput.innerHTML = "";
