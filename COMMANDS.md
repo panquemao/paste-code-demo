@@ -1,4 +1,4 @@
-# Command List for `?help` in Terminal
+# Command List for `help` in Terminal
 
 ```bash
 Commands:
@@ -25,6 +25,10 @@ Commands:
     - theme [set | get | reset | list] [:string]
         usage:
             theme set dark
+
+    - execute [:int (windows: 0-3, default: 0)]
+        usage:
+            execute 0
 
     - cls
 
