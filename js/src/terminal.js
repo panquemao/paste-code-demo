@@ -84,6 +84,9 @@ class Terminal{
         - theme [set | get | reset | list] [:string]
             usage:
                 theme set dark
+        - run [:int (windows: 0-3, default: 0)]
+            usage:
+                run 1
 
         - cls
     
@@ -117,6 +120,7 @@ class Terminal{
         config: ["set", "get", "reset"],
         font: ["set", "get", "reset"],
         theme: ["set", "get", "reset", "list"],
+        run: 0
     }
     // Execution
     exec = (arg) => {
@@ -285,6 +289,10 @@ class Terminal{
             }
 
             return result;
+        },
+        "run": (opt) => {
+
+
         }
     }
 
