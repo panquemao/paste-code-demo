@@ -60,8 +60,9 @@ You can execute code in the terminal with the command `execute [--window-number]
 You should try our executer. You will love it ❤️.
 
 ## Dependencies
-This project uses [lzma.js](https://github.com/LZMA-JS/LZMA-JS) and native [Base64](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding) functions.
+This project uses [lzma.js](https://github.com/LZMA-JS/LZMA-JS) and native [Base64](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding) functions to compress the code.
 
+And use the [prism.js](https://prismjs.com) to highlight the code.
 ## License
 MIT License
 
