@@ -117,7 +117,7 @@ class Terminal{
         javascript: "./js/min/executer/executer.min.js",
         typescript: "https://unpkg.com/typescript@latest/lib/typescriptServices.js",
         brainfuck: "./js/min/executer/brainfuck.min.js",
-        php: "./js/min/executer/php.min.js",
+        php: "./js/src/executer/php.js",
     }
 
     constructor(opt){
@@ -486,6 +486,22 @@ class Terminal{
                     break;
 
                 case 'php':
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const entry = urlParams.entries();
+
+                    // Join entry as ["aa" => "AAA"]
+                    let get = [];
+                    for (const pair of entry) {
+                        get.push(`"${pair[0]}" => "${pair[1]}"`);
+                    }
+                    
+                    // Remove <?php
+                    code = code.replace('<?php', '');
+                    // Add $_GET variable
+                    code = `<?php
+                        $_GET = [${get.join(', ')}];
+                    ` + code;
+
 
                     function executePHP(){
                         let php = new PHP(code);
