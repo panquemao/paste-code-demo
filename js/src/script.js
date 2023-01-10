@@ -94,6 +94,25 @@ window.addEventListener('load', () => {
         lineActive: [],
     }
 
+    // ==== GET LANG ============
+    const _getLang = (window) => {
+        // Get first line of code
+        const _LINES = window.value.split('\n')
+        const firstLine = _LINES[0];
+        if(firstLine.match(/[\!|\?]/)) {
+            // Get language
+            let arr = firstLine.split(/[\!|\?]/);
+            let tmpLang = arr[arr.length-1].toLowerCase(); // Fixed ISSUE #8
+
+            // Check if language is valid
+            if(!tmpLang.includes('-->')) return tmpLang;
+
+            // Remove -->
+            return tmpLang.replace('-->', '').trim();
+
+        }
+        return false;
+    }
     // ==== UPDATE CODE =========
     const _update_code = (window) => {
         // Get window index
@@ -101,17 +120,13 @@ window.addEventListener('load', () => {
         // Get code window
         const codeWindow = WINDOW_CONFIG.codeWindow[index];
 
-        // Get first line of code
         const _LINES = window.value.split('\n')
-        const firstLine = _LINES[0];
-        if(firstLine.includes("!")) {
-            // Get language
-            let arr = firstLine.split('!');
-            const language = arr[arr.length-1].toLowerCase();  // Fixed ISSUE #8
-
+        // Get lang and set
+        let language = _getLang(window);
+        if(language) 
             // Set language
             codeWindow.setAttribute('class', `language-${language}`);
-        }
+
 
         codeWindow.innerHTML = window.value.replace(new RegExp("&", "g"), "&amp;").replace(new RegExp("<", "g"), "&lt;"); /* Global RegExp */
 
@@ -690,6 +705,7 @@ window.addEventListener('load', () => {
                     add: addWindow,
                     remove: removeWindow,
                     config: WINDOW_CONFIG,
+                    getLang: _getLang,
                 },
                 theme: {
                     list: ThemeArr,

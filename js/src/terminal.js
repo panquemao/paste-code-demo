@@ -114,9 +114,10 @@ class Terminal{
 
     executer = {
         python: "https://pyscript.net/latest/pyscript.js",
-        javascript: "./js/min/executer.min.js",
+        javascript: "./js/min/executer/executer.min.js",
         typescript: "https://unpkg.com/typescript@latest/lib/typescriptServices.js",
-        brainfuck: "./js/min/brainfuck.min.js",
+        brainfuck: "./js/min/executer/brainfuck.min.js",
+        php: "./js/min/executer/php.min.js",
     }
 
     constructor(opt){
@@ -329,6 +330,7 @@ class Terminal{
                 "javascript" : ["javascript", "js"],
                 "typescript" : ["typescript", "ts"],
                 "brainfuck" : ["brainfuck", "bf"],
+                "php" : ["php"],
             }
 
             let i = opt[1] || 0;
@@ -337,20 +339,16 @@ class Terminal{
             if(!el) return [0, `Window ${i} not found`];
 
             let code = el.value;
-
-            // Get first line of code
-            const _LINES = code.split('\n')
-            const firstLine = _LINES[0];
-            if(!firstLine.includes("!")) return result;
-
-            // Get language
-            let arr = firstLine.split('!');
-            const language = arr[arr.length-1].toLowerCase();  // Fixed ISSUE #8
+            
+            let _LINES = code.split("\n");
+            // Get lang
+            let language = this.#hash.window.getLang(el);
 
             // Get language code
-            let langCode = Object.entries(lang).find(([key, value]) => value.includes(language))[0];
+            let langCode = Object.entries(lang).find(([key, value]) => value.includes(language));
 
             if(!langCode) return [0, `Language "${language}" not executable. See <a href="https://github.com/ZhengLinLei/paste-code/blob/main/EXECUTER.md">https://github.com/ZhengLinLei/paste-code/blob/main/EXECUTER.md</a> for more information.`];
+            else langCode = langCode[0];
 
             let url = this.executer[langCode];
 
@@ -480,10 +478,27 @@ class Terminal{
                         });
                     }
 
-                    if(!window.Brainfuck)
+                    if(typeof Brainfuck === 'undefined')
                         script.onload = executeBF;
                     else
                         executeBF();
+            
+                    break;
+
+                case 'php':
+
+                    function executePHP(){
+                        let php = new PHP(code);
+                        let output = php.vm.OUTPUT_BUFFER;
+
+                        clearLoad();
+                        Out(output);
+                    }
+
+                    if(typeof PHP === 'undefined')
+                        script.onload = executePHP;
+                    else
+                        executePHP();
             }
 
             return [1, ""];

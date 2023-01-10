@@ -4,6 +4,7 @@
 * Javascript - javascript, js
 * Typescript - typescript, ts
 * Brainfuck - brainfuck, bf
+* PHP - php
 
 
 
