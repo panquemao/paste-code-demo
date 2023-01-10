@@ -5,7 +5,7 @@
 * Typescript - typescript, ts
 * Brainfuck - brainfuck, bf
 * PHP - php
-
+* JAVA - java
 
 
 Be patien if your language is not supported. We are working to add it into the list. Take some snacks and wait to out notice. ☕️

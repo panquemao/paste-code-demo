@@ -113,11 +113,12 @@ class Terminal{
     `;
 
     executer = {
-        python: "https://pyscript.net/latest/pyscript.js",
-        javascript: "./js/min/executer/executer.min.js",
-        typescript: "https://unpkg.com/typescript@latest/lib/typescriptServices.js",
-        brainfuck: "./js/min/executer/brainfuck.min.js",
-        php: "./js/src/executer/php.js",
+        python: "https://pyscript.net/latest/pyscript.js", // https://github.com/pyscript/pyscript
+        javascript: "./js/min/executer/executer.min.js", // https://github.com/ZhengLinLe/paste-code
+        typescript: "https://unpkg.com/typescript@latest/lib/typescriptServices.js", // https://github.com/basarat/typescript-script
+        brainfuck: "./js/min/executer/brainfuck.min.js", // https://github.com/maciejkrol/brainfuck
+        php: "./js/src/executer/php.js", // https://github.com/niklasvh/php.js
+        java: "https://unpkg.com/java-to-javascript@latest/build/java-to-javascript.min.js", // https://github.com/wyattades/java-to-javascript
     }
 
     constructor(opt){
@@ -331,6 +332,7 @@ class Terminal{
                 "typescript" : ["typescript", "ts"],
                 "brainfuck" : ["brainfuck", "bf"],
                 "php" : ["php"],
+                "java" : ["java"],
             }
 
             let i = opt[1] || 0;
@@ -373,6 +375,9 @@ class Terminal{
 
             function clearLoad(){
                 document.querySelector(`#${tmp}`).innerHTML = "";
+            }
+            function writeLoad(test){
+                document.querySelector(`#${tmp}`).innerHTML += test;
             }
 
             // Remove first line in code
@@ -421,11 +426,17 @@ class Terminal{
                     function executeTS(){
                         clearLoad();
 
-                        // Transpile
-                        let jsCode = window.ts.transpile(code);
+                        try{
+                            // Transpile
+                            let jsCode = window.ts.transpile(code);
 
-                        let runned = new JSexecuter(jsCode);
-                        runned.run();
+                            let runned = new JSexecuter(jsCode);
+                            runned.run();
+                        } catch(e){
+                            writeLoad(`<span class="token title important">Error TS</span>: ${e}`);
+
+                            return [0, "Error executing"]
+                        }
                     }
                     if(!window.ts)
                         script.onload = executeTS;
@@ -515,6 +526,41 @@ class Terminal{
                         script.onload = executePHP;
                     else
                         executePHP();
+
+                    break;
+
+                case "java":
+                    // Replace System.out.println to Out
+                    code = code.replace(/System.out.println\(/g, "Out(");
+
+                    function executeJAVA(){
+                        clearLoad();
+                        // JAVA to JS
+                        try{
+                            let js = window.javaToJavascript(code);
+                            js += `
+                            if(typeof Main === 'function'){
+                                Main.main();
+                            }
+                            `;
+
+                            let runned = new JSexecuter(js);
+                            runned.run();
+                        }
+                        catch(e){
+                            writeLoad(`<span class="token title important">Error Java</span>: ${e}`);
+
+                            return [0, "Error executing"];
+                        }
+                    }
+
+                    if(typeof window.javaToJavascript === 'undefined')
+                        script.onload = executeJAVA;
+                    else
+                        executeJAVA();
+
+                    break;
+
             }
 
             return [1, ""];
