@@ -321,8 +321,10 @@ class Terminal{
                     <span>Language not found.</span>
                 </div>
                 <div>
-                    <span>Example: <span class="token comment">!PY</span></span>
+                    <span>Example: <span class="token comment">!PY</span>, <span class="token comment">!TS</span>, <span class="token comment">!JAVASCRIPT</span></span>
                 </div>
+                <br>
+                <div>See <a href="https://github.com/ZhengLinLei/paste-code/blob/main/EXECUTER.md">https://github.com/ZhengLinLei/paste-code/blob/main/EXECUTER.md</a> for more information.</div>
             `];
 
 
@@ -345,6 +347,9 @@ class Terminal{
             let _LINES = code.split("\n");
             // Get lang
             let language = this.#hash.window.getLang(el);
+
+            if(language === false) return result;
+
 
             // Get language code
             let langCode = Object.entries(lang).find(([key, value]) => value.includes(language));
@@ -413,7 +418,8 @@ class Terminal{
                 case 'javascript':
                     // Change console.log to Out
                     code = code.replace(/console.log\(/g, "Out(");
-
+                    
+                    clearLoad();
                     let runned = new JSexecuter(code);
                     runned.run();
 
@@ -508,11 +514,14 @@ class Terminal{
                     
                     // Remove <?php
                     code = code.replace('<?php', '');
+                    code = code.replace('?>', '');
                     // Add $_GET variable
                     code = `<?php
                         $_GET = [${get.join(', ')}];
-                    ` + code;
-
+                    ` 
+                    + code + `
+                    ?>
+                    `;
 
                     function executePHP(){
                         let php = new PHP(code);
@@ -535,6 +544,7 @@ class Terminal{
 
                     function executeJAVA(){
                         clearLoad();
+
                         // JAVA to JS
                         try{
                             let js = window.javaToJavascript(code);
@@ -543,7 +553,7 @@ class Terminal{
                                 Main.main();
                             }
                             `;
-
+                            console.log(js);
                             let runned = new JSexecuter(js);
                             runned.run();
                         }

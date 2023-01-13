@@ -2736,17 +2736,8 @@ PHP.Modules.prototype[ PHP.Compiler.prototype.SIGNATURE ] = function( args, name
 })( PHP.Modules.prototype )
 
 
-
-
-
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 26.6.2012 
-* @website http://hertzen.com
- */
-
-
+// Functions ===========
+// A
 PHP.Modules.prototype.array = function( ) {
     
     var arr;
@@ -2760,7 +2751,6 @@ PHP.Modules.prototype.array = function( ) {
     return new PHP.VM.Variable( arr );
     
 };
-
 PHP.Modules.prototype.array_key_exists = function( key, search ) {
     
     var COMPILER = PHP.Compiler.prototype,
@@ -2796,15 +2786,6 @@ PHP.Modules.prototype.array_key_exists = function( key, search ) {
     }
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 19.7.2012 
-* @website http://hertzen.com
- */
-
-
-
-
 PHP.Modules.prototype.$array_merge = function() {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -2820,14 +2801,6 @@ PHP.Modules.prototype.$array_merge = function() {
     return array;
 
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 14.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.array_pop = function( array ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -2843,28 +2816,12 @@ PHP.Modules.prototype.array_pop = function( array ) {
     return value;
 
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 14.7.2012 
-* @website http://hertzen.com
- */
-
 PHP.Modules.prototype.array_push = function( array ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype;
     
     array[ COMPILER.VARIABLE_VALUE ][ COMPILER.METHOD_CALL ]( this, "append", arguments[ 1 ] )
 };
-
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 17.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.array_search = function( needle, haystack, strict ) {
     
     var COMPILER = PHP.Compiler.prototype,
@@ -2905,13 +2862,6 @@ PHP.Modules.prototype.array_search = function( needle, haystack, strict ) {
     }
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 16.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.array_shift = function( array ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -2938,14 +2888,6 @@ PHP.Modules.prototype.array_shift = function( array ) {
     return value;
 
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 16.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.array_unshift = function( array ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -2982,13 +2924,7 @@ PHP.Modules.prototype.array_unshift = function( array ) {
     return new PHP.VM.Variable( value.length );
 
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 29.6.2012 
-* @website http://hertzen.com
- */
-
-
+// C
 PHP.Modules.prototype.count = function( variable ) {
     
     var COMPILER = PHP.Compiler.prototype,
@@ -3001,13 +2937,6 @@ PHP.Modules.prototype.count = function( variable ) {
     }
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 10.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.current = function( array ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -3026,18 +2955,81 @@ PHP.Modules.prototype.current = function( array ) {
         }
         
        
-    } 
-    
-    
+    }
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 10.7.2012 
-* @website http://hertzen.com
- */
+// D
+PHP.Modules.prototype.date = function ( format, timestamp ) {
 
+    var COMPILER = PHP.Compiler.prototype,
+    format = format[ COMPILER.VARIABLE_VALUE ],
+    timestamp = (( timestamp === undefined ) ? PHP.Modules.prototype.time() : timestamp)[ COMPILER.VARIABLE_VALUE ];
 
+    // Prepare Date =======
+    Date.prototype.stdTimezoneOffset = function () {
+        var jan = new Date(this.getFullYear(), 0, 1);
+        var jul = new Date(this.getFullYear(), 6, 1);
+        return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+    }
+    
+    Date.prototype.isDstObserved = function () {
+        return this.getTimezoneOffset() < this.stdTimezoneOffset();
+    }
 
+    var date = new Date( timestamp * 1000 );
+
+    var day = date.getDate(),
+    month = date.getMonth(),
+    year = date.getFullYear(),
+    hour = date.getHours(),
+    hour12 = ( hour > 12 ) ? hour - 12 : hour,
+    minute = date.getMinutes(),
+    second = date.getSeconds(),
+    day_of_week = date.getDay(),
+    ampm = ( hour > 12 ) ? "pm" : "am";
+
+    let looper = {
+        d: ( day < 10 ) ? "0" + day : day,
+        D: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][ day_of_week ],
+        j: day,
+        l: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][ day_of_week ],
+        N: day_of_week,
+        S: ( day == 1 || day == 21 || day == 31 ) ? "st" : ( day == 2 || day == 22 ) ? "nd" : ( day == 3 || day == 23 ) ? "rd" : "th",
+
+        F: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][ month ],
+        m: ( month < 10 ) ? "0" + month : month,
+        M: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][ month ],
+        n: month,
+
+        L: ( year % 4 == 0 && year % 100 != 0 || year % 400 == 0 ) ? 1 : 0,
+        Y: ( year < 10 ) ? "000" + year : ( year < 100 ) ? "00" + year : ( year < 1000 ) ? "0" + year : year,
+        y: String(year).slice(2),
+
+        a: ampm,
+        A: ampm.toUpperCase(),
+        g: hour12,
+        G: hour,
+        h: ( hour12 < 10 ) ? "0" + hour12 : hour12,
+        H: ( hour < 10 ) ? "0" + hour : hour,
+        i: ( minute < 10 ) ? "0" + minute : minute,
+        s: ( second < 10 ) ? "0" + second : second,
+        u: date.getMilliseconds(),
+        v: date.getMilliseconds() * 1000,
+
+        e: date.getTimezoneOffset(),
+        I: date.isDstObserved(),
+
+        c: date.toISOString(),
+        U: Math.floor(date.getTime() / 1000)
+    }
+
+    // Get keys and values in loop to be replaced
+    for (const [key, value] of Object.entries(looper)) {
+        format = format.replaceAll(key, value);
+    }
+
+    return new PHP.VM.Variable( format );
+};
+// E
 PHP.Modules.prototype.each = function( array ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -3065,13 +3057,6 @@ PHP.Modules.prototype.each = function( array ) {
     
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 2.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.is_array = function( variable ) {
     
     var COMPILER = PHP.Compiler.prototype,
@@ -3082,14 +3067,6 @@ PHP.Modules.prototype.is_array = function( variable ) {
     
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 12.7.2012 
-* @website http://hertzen.com
- */
-
-
-
 PHP.Modules.prototype.key = function( array ) {
       var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -3112,15 +3089,6 @@ PHP.Modules.prototype.key = function( array ) {
     
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 10.7.2012 
-* @website http://hertzen.com
- */
-
-
-
-
 PHP.Modules.prototype.list = function() {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -3162,12 +3130,6 @@ PHP.Modules.prototype.list = function() {
     
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 12.7.2012 
-* @website http://hertzen.com
- */
-
 PHP.Modules.prototype.next = function( array ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -3192,14 +3154,6 @@ PHP.Modules.prototype.next = function( array ) {
     
     
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 10.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.reset = function( array ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -3222,13 +3176,6 @@ PHP.Modules.prototype.reset = function( array ) {
     
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 11.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.class_exists = function( class_name, autoload ) {
     var COMPILER = PHP.Compiler.prototype;
     
@@ -3239,14 +3186,6 @@ PHP.Modules.prototype.class_exists = function( class_name, autoload ) {
     return new PHP.VM.Variable( this.$Class.Exists( class_name[ COMPILER.VARIABLE_VALUE ] )  );
     
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 9.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.get_class = function( object ) {
     var COMPILER = PHP.Compiler.prototype;
  
@@ -3258,13 +3197,6 @@ PHP.Modules.prototype.get_class = function( object ) {
  
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 17.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.get_declared_classes = function( ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -3278,15 +3210,6 @@ PHP.Modules.prototype.get_declared_classes = function( ) {
     return this.array( items );
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 12.7.2012 
-* @website http://hertzen.com
- */
-
-
-
-
 PHP.Modules.prototype.get_class_methods = function( object ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype;
@@ -3318,13 +3241,6 @@ PHP.Modules.prototype.get_class_methods = function( object ) {
     
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 13.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.get_parent_class = function( object ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -3344,13 +3260,6 @@ PHP.Modules.prototype.get_parent_class = function( object ) {
     }
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 11.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.interface_exists = function( class_name, autoload ) {
     var COMPILER = PHP.Compiler.prototype;
      
@@ -3361,16 +3270,6 @@ PHP.Modules.prototype.interface_exists = function( class_name, autoload ) {
     return new PHP.VM.Variable( this.$Class.Exists( class_name[ COMPILER.VARIABLE_VALUE ] )  );
     
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 13.7.2012 
-* @website http://hertzen.com
- */
-
-
-
-
 PHP.Modules.prototype.is_subclass_of = function( object, classNameObj ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -3396,13 +3295,6 @@ PHP.Modules.prototype.is_subclass_of = function( object, classNameObj ) {
     }
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 11.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.method_exists = function( object, method ) {
     var VARIABLE = PHP.VM.Variable.prototype,
     COMPILER = PHP.Compiler.prototype;
@@ -3526,7 +3418,6 @@ PHP.Modules.prototype.$foreachEnd = function( iterator ) {
     }
 
 };
-
 PHP.Modules.prototype.foreach = function( iterator, byRef, value, key ) {
 
     var COMPILER = PHP.Compiler.prototype,
@@ -3733,8 +3624,6 @@ PHP.Modules.prototype.$include = function( $, $Static, file ) {
         return new PHP.VM.Variable( arg );
     }, $, this, $Static);
 };
-
-
 PHP.Modules.prototype.include = function() {
     this.$include.apply(this, arguments);
 };
@@ -3788,27 +3677,10 @@ PHP.Constants.DATE_W3C = "Y-m-d\\TH:i:sP";
 PHP.Constants.SUNFUNCS_RET_TIMESTAMP = 0;
 PHP.Constants.SUNFUNCS_RET_STRING = 1;
 PHP.Constants.SUNFUNCS_RET_DOUBLE = 2;
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 20.7.2012 
-* @website http://hertzen.com
- */
-
 PHP.Modules.prototype.date_default_timezone_set = function() {
     // todo add functionality
     return new PHP.VM.Variable( true );
 };
-
-
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 3.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.mktime = function( hour, minute, second, month, day, year, is_dst ) {
     
     var date = new Date(),
@@ -3827,19 +3699,10 @@ PHP.Modules.prototype.mktime = function( hour, minute, second, month, day, year,
     
     return new PHP.VM.Variable( Math.round( createDate.getTime() / 1000 ) );
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 3.7.2012 
-* @website http://hertzen.com
- */
-
-
-PHP.Modules.prototype.time = function() {
-    
+// T
+PHP.Modules.prototype.time = function() {  
     return new PHP.VM.Variable( Math.round( Date.now() / 1000 ) );
 };
-
-
 /* Automatically built from PHP version: 5.4.0-ZS5.6.0 */
 PHP.Constants.E_ERROR = 1;
 PHP.Constants.E_RECOVERABLE_ERROR = 4096;
@@ -3857,12 +3720,6 @@ PHP.Constants.E_USER_WARNING = 512;
 PHP.Constants.E_USER_NOTICE = 1024;
 PHP.Constants.E_USER_DEPRECATED = 16384;
 PHP.Constants.E_ALL = 32767;
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 26.6.2012 
-* @website http://hertzen.com
- */
 
 PHP.Modules.prototype.trigger_error = function( msg, level ) {
           this[ PHP.Compiler.prototype.ERROR ]( msg.$, ( level !== undefined ) ? level.$ : PHP.Constants.E_USER_NOTICE  , true );    
@@ -3884,25 +3741,10 @@ PHP.Modules.prototype.dirname = function( path ) {
     dir = PHP.Utils.Path( path[ COMPILER.VARIABLE_VALUE ] )
     return new PHP.VM.Variable( dir );
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 30.6.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.fclose = function( fp ) {
 
     return new PHP.VM.Variable( true );
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 18.7.2012 
-* @website http://hertzen.com
- */
-
-
-
 PHP.Modules.prototype.file_get_contents = function( filenameObj ) {
     var COMPILER = PHP.Compiler.prototype,
     filename = filenameObj[ COMPILER.VARIABLE_VALUE ];
@@ -3924,13 +3766,6 @@ PHP.Modules.prototype.file_get_contents = function( filenameObj ) {
     }            
 
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 29.6.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.fopen = function( filenameObj ) {
     var COMPILER = PHP.Compiler.prototype,
     filename = filenameObj[ COMPILER.VARIABLE_VALUE ];
@@ -3939,14 +3774,6 @@ PHP.Modules.prototype.fopen = function( filenameObj ) {
                         
     return new PHP.VM.Variable( new PHP.VM.Resource() );
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 18.7.2012 
-* @website http://hertzen.com
- */
-
-
-
 PHP.Modules.prototype.is_uploaded_file = function( filenameObj ) {
     var COMPILER = PHP.Compiler.prototype,
     filename = filenameObj[ COMPILER.VARIABLE_VALUE ];
@@ -3961,13 +3788,6 @@ PHP.Modules.prototype.is_uploaded_file = function( filenameObj ) {
                         
     return new PHP.VM.Variable( true );
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 18.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.realpath = function( filenameObj ) {
     var COMPILER = PHP.Compiler.prototype,
     filename = filenameObj[ COMPILER.VARIABLE_VALUE ];
@@ -3976,12 +3796,6 @@ PHP.Modules.prototype.realpath = function( filenameObj ) {
                         
     return new PHP.VM.Variable( filename );
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 17.7.2012 
-* @website http://hertzen.com
- */
-
 PHP.Modules.prototype.rename = function( from, to ) {
     var COMPILER = PHP.Compiler.prototype,
     filename = from[ COMPILER.VARIABLE_VALUE ],
@@ -3991,14 +3805,6 @@ PHP.Modules.prototype.rename = function( from, to ) {
                         
     return new PHP.VM.Variable( false );
 };
-
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 4.7.2012 
-* @website http://hertzen.com
- */
-
 PHP.Modules.prototype.call_user_func = function( callback ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -4061,13 +3867,6 @@ PHP.Modules.prototype.call_user_func = function( callback ) {
   
     
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 4.7.2012 
-* @website http://hertzen.com
- */
-
 PHP.Modules.prototype.call_user_func_array = function( callback ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype,
@@ -4137,14 +3936,6 @@ PHP.Modules.prototype.call_user_func_array = function( callback ) {
   
     
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 16.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.create_function = function( args, source ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype;
@@ -4186,14 +3977,6 @@ PHP.Modules.prototype.create_function = function( args, source ) {
     return lambda;
     
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 11.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.function_exists = function( function_name ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype;
@@ -4206,14 +3989,6 @@ PHP.Modules.prototype.function_exists = function( function_name ) {
   
     
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 15.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.dechex = function( variable ) {
     var COMPILER = PHP.Compiler.prototype,
     VARIABLE = PHP.VM.Variable.prototype;
@@ -4233,13 +4008,6 @@ PHP.Modules.prototype.constant = function( name ) {
         return new PHP.VM.Variable();
     }
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 7.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.define = function( name, value, case_insensitive ) {
     
     var COMPILER = PHP.Compiler.prototype,
@@ -4258,12 +4026,6 @@ PHP.Modules.prototype.define = function( name, value, case_insensitive ) {
      return new PHP.VM.Variable( true );
   
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 7.7.2012 
-* @website http://hertzen.com
- */
-
 PHP.Modules.prototype.defined = function( name ) {
     
     var COMPILER = PHP.Compiler.prototype,
@@ -4274,8 +4036,6 @@ PHP.Modules.prototype.defined = function( name ) {
      return new PHP.VM.Variable( this.$Constants[ COMPILER.CONSTANT_DEFINED ]( variableName ) );
   
 };
-
-
 PHP.Modules.prototype.eval = function( $, $Static, $this, ctx, ENV, code) {
     var COMPILER = PHP.Compiler.prototype;
 
@@ -4314,69 +4074,26 @@ PHP.Modules.prototype.eval = function( $, $Static, $this, ctx, ENV, code) {
     }
 
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 17.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.exit = function( message ) {
     
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 9.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.php_egg_logo_guid = function(  ) {
     
     return new PHP.VM.Variable("PHPE9568F36-D428-11d2-A769-00AA001ACF42");
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 9.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.php_logo_guid = function(  ) {
     
     return new PHP.VM.Variable("PHPE9568F34-D428-11d2-A769-00AA001ACF42");
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 9.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.php_real_logo_guid = function(  ) {
     
     return new PHP.VM.Variable("PHPE9568F34-D428-11d2-A769-00AA001ACF42");
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 9.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.zend_logo_guid = function(  ) {
     
     return new PHP.VM.Variable("PHPE9568F35-D428-11d2-A769-00AA001ACF42");
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 18.7.2012 
-* @website http://hertzen.com
- */
-
-
-
 PHP.Modules.prototype.header= function( string ) {
     
     var COMPILER = PHP.Compiler.prototype,
@@ -4386,27 +4103,12 @@ PHP.Modules.prototype.header= function( string ) {
     // todo add to output
     
 };
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 14.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.assert = function( assertion ) {
     // todo add  
     var COMPILER = PHP.Compiler.prototype;
     return (new PHP.VM.Variable( assertion[ COMPILER.VARIABLE_VALUE] ));
     
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 15.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.ini_get = function( varname ) {
     var COMPILER = PHP.Compiler.prototype,
     old = this.$ini[ varname[ COMPILER.VARIABLE_VALUE ] ];
@@ -4424,14 +4126,6 @@ PHP.Modules.prototype.ini_get = function( varname ) {
     
   
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 15.7.2012 
-* @website http://hertzen.com
- */
-
-
 PHP.Modules.prototype.ini_restore = function( varname ) {
   var COMPILER = PHP.Compiler.prototype;
     this.$ini[ varname[ COMPILER.VARIABLE_VALUE ] ] = Object.getPrototypeOf(this.$ini)[ varname[ COMPILER.VARIABLE_VALUE ] ];
@@ -4443,13 +4137,6 @@ PHP.Modules.prototype.ini_restore = function( varname ) {
     
   
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 5.7.2012 
-* @website http://hertzen.com
- */
-
 PHP.Modules.prototype.ini_set = PHP.Modules.prototype.ini_alter = function( varname, newvalue ) {
       var COMPILER = PHP.Compiler.prototype;
     var old = this.$ini[ varname[ COMPILER.VARIABLE_VALUE ] ];
@@ -4459,8 +4146,6 @@ PHP.Modules.prototype.ini_set = PHP.Modules.prototype.ini_alter = function( varn
     
     return new PHP.VM.Variable( old );
 };
-
-
 PHP.Modules.prototype.getenv = function( name ) {
     var COMPILER = PHP.Compiler.prototype,
     variableValue = name[ COMPILER.VARIABLE_VALUE ];
@@ -4475,13 +4160,6 @@ PHP.Modules.prototype.getenv = function( name ) {
 
     }
 };
-
-/* 
-* @author Niklas von Hertzen <niklas at hertzen.com>
-* @created 11.7.2012 
-* @website http://hertzen.com
- */
-
 ( function( MODULES ){
     MODULES.set_time_limit = function(  newvalue ) {
         
@@ -15572,6 +15250,5 @@ PHP.Locales = {
         decimal_point: ",",
         thousands_sep: "."
     }  
-    
-    
 };
+
