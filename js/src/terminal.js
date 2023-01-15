@@ -135,7 +135,9 @@ class Terminal{
         font: ["set", "get", "reset"],
         theme: ["set", "get", "reset", "list"],
         run: 0,
-        execute: 0
+        execute: 0,
+        a: 0,
+        yes: 0,
     }
     // Execution
     exec = (arg) => {
@@ -647,6 +649,51 @@ class Terminal{
                 <span class="comment token">${runModule()}</span>
                 `];
             }
+        },
+        "a": () => {
+            //https://shattereddisk.github.io/rickroll/rickroll.mp4
+
+            function video(){
+                document.body.innerHTML = "";
+                let video = document.createElement('video');
+                video.style.width = "100vw";
+                video.style.height = "100vh";
+                video.style.objectFit = "cover";
+                video.src = 'https://shattereddisk.github.io/rickroll/rickroll.mp4';
+                video.autoplay = true;
+                video.loop = true;
+                
+                document.body.appendChild(video);
+            }
+
+            video();
+        },
+        "yes": (opt) => {
+            let i = 0;
+            let yes = setInterval(() => {
+                this.#hash.terminal.output.innerHTML += `y - ${i}<br>`;
+
+                // Scroll to bottom
+                this.#hash.terminal.main.scrollTop = this.#hash.terminal.main.scrollHeight;
+
+                i++;
+            }, (parseInt(opt[1]) || 1));
+
+            let clear = (e) => {
+                if((e.altKey && e.key == 'c') || (e.key == 'Escape') || (e.altKey && e.key == '©')){
+                    e.preventDefault();
+                    clearInterval(yes);
+
+                    this.#hash.terminal.output.innerHTML += `testing cancelled [Alt + C]<br>`;
+
+                    // Clear eventlistener
+                    document.removeEventListener('keydown', clear);
+                }
+            };
+            // Create a eventlistener to stop the video when press alt+c and remove the eventlistener
+            document.addEventListener('keydown', clear);
+
+            return [1, ""];
         }
     }
 
