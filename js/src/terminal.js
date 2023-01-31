@@ -654,10 +654,17 @@ class Terminal{
             //https://shattereddisk.github.io/rickroll/rickroll.mp4
 
             function video(){
-                document.body.innerHTML = "";
+                document.body.innerHTML = `
+                    <div style="position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);text-align:center;">
+                        <h1>Waiting...</h1>
+                    </div>
+                `;
                 let video = document.createElement('video');
                 video.style.width = "100vw";
                 video.style.height = "100vh";
+                video.style.position = "fixed";
+                video.style.top = "0";
+                video.style.left = "0";
                 video.style.objectFit = "cover";
                 video.src = 'https://shattereddisk.github.io/rickroll/rickroll.mp4';
                 video.autoplay = true;
