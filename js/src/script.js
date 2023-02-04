@@ -211,8 +211,11 @@ window.addEventListener('load', () => {
             newWindow.setAttribute('class', 'textarea-main');
             newWindow.setAttribute('spellcheck', 'false');
             newWindow.setAttribute('outline', 'none');
+            newWindow.setAttribute('autofill', 'false');
             newWindow.setAttribute('autocorrect', 'off');
             newWindow.setAttribute('autocapitalize', 'off');
+            newWindow.setAttribute('autocomplete', 'off');
+            newWindow.setAttribute('wrap', 'off');
             newWindow.setAttribute('aria-label', 'Paste Code');
             newWindow.setAttribute('tabindex', '0');
             newWindow.addEventListener('input', () => _update_code(newWindow));

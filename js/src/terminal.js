@@ -119,6 +119,7 @@ class Terminal{
         brainfuck: "./js/min/executer/brainfuck.min.js", // https://github.com/maciejkrol/brainfuck
         php: "./js/src/executer/php.js", // https://github.com/niklasvh/php.js
         java: "https://unpkg.com/java-to-javascript@latest/build/java-to-javascript.min.js", // https://github.com/wyattades/java-to-javascript
+        html: ""
     }
 
     constructor(opt){
@@ -337,6 +338,7 @@ class Terminal{
                 "brainfuck" : ["brainfuck", "bf"],
                 "php" : ["php"],
                 "java" : ["java"],
+                "html" : ["html"],
             }
 
             let i = opt[1] || 0;
@@ -572,6 +574,14 @@ class Terminal{
                         executeJAVA();
 
                     break;
+
+                case "html":
+                    // Temporal solution
+
+                    // Open new window and write the html
+                    document.open();
+                    document.write(code);
+                    document.close();
 
             }
 
