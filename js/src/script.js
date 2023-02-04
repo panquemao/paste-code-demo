@@ -61,7 +61,7 @@ let setTabSize = (size) => {
     tabSize = size;
 
 };
-let tabSize = 4;
+let tabSize = 4, tabRegex = /\t/g;
 // Theme list
 const ThemeArr = ['light', 'dark', 'funky', 'twilight', 'solarized', 'night', 'zll'];
 
@@ -127,9 +127,11 @@ window.addEventListener('load', () => {
             // Set language
             codeWindow.setAttribute('class', `language-${language}`);
 
+        
+        if (tabRegex.test(window.value))
+            window.value = window.value.replaceAll(tabRegex, " ".repeat(tabSize));
 
         codeWindow.innerHTML = window.value
-                                            .replaceAll(/\t/g, " ".repeat(tabSize))
                                             .replaceAll(new RegExp("&", "g"), "&amp;")
                                             .replaceAll(new RegExp("<", "g"), "&lt;"); /* Global RegExp */
 
