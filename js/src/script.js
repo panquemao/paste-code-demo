@@ -128,7 +128,10 @@ window.addEventListener('load', () => {
             codeWindow.setAttribute('class', `language-${language}`);
 
 
-        codeWindow.innerHTML = window.value.replace(new RegExp("&", "g"), "&amp;").replace(new RegExp("<", "g"), "&lt;"); /* Global RegExp */
+        codeWindow.innerHTML = window.value
+                                            .replaceAll(/\t/g, " ".repeat(tabSize))
+                                            .replaceAll(new RegExp("&", "g"), "&amp;")
+                                            .replaceAll(new RegExp("<", "g"), "&lt;"); /* Global RegExp */
 
         Prism.highlightElement(codeWindow);
 
