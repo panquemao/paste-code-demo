@@ -85,7 +85,7 @@ class Terminal{
             usage:
                 theme set dark
 
-        - run [:int (windows: 0-3, default: 0)]
+        - run [:int (windows: 0-3, default: 0)] [list]
             usage:
                 run 1
 

@@ -88,6 +88,7 @@ window.addEventListener('load', () => {
         min: 1,
         label: 'Window',
         current: 0,
+        focus: 0,   // ISSUE #13
         windows: [],
         codeWindow: [],
         windows_value: [],
@@ -191,9 +192,14 @@ window.addEventListener('load', () => {
         if (WINDOW_CONFIG.current < WINDOW_CONFIG.max) {
             // Add window
 
-
             // Add window to array
             const windowParent = document.createElement('div');
+            windowParent.addEventListener('click', () => {
+                let index = windowParent.classList[0].replace('w-', '');
+
+                // Set focus
+                WINDOW_CONFIG.focus = index;
+            });
             //
             const codeWindow = document.createElement('pre');
             codeWindow.setAttribute('aria-hidden', 'true');
@@ -359,11 +365,23 @@ window.addEventListener('load', () => {
     const removeWindow = () => {
         if (WINDOW_CONFIG.current > WINDOW_CONFIG.min) {
             // Remove last window
-            WINDOW_CONFIG.parent.removeChild(WINDOW_CONFIG.windows[WINDOW_CONFIG.windows.length - 1].parentElement);
-            // Remove last window from array
-            WINDOW_CONFIG.windows.pop();
-            WINDOW_CONFIG.codeWindow.pop(); // Remove code window ISSUE #7
+            console.log(WINDOW_CONFIG.focus);
+            WINDOW_CONFIG.parent.removeChild(WINDOW_CONFIG.windows[WINDOW_CONFIG.focus].parentElement);
+            // Remove from array resetting index
+            WINDOW_CONFIG.windows = WINDOW_CONFIG.windows.filter((win, index) => index != WINDOW_CONFIG.focus);
+            // Remove code window ISSUE #7 and #13 resetting index
+            WINDOW_CONFIG.codeWindow = WINDOW_CONFIG.codeWindow.filter((win, index) => index != WINDOW_CONFIG.focus);  // Remove code window ISSUE #7 and #13
+
             WINDOW_CONFIG.current--;
+
+            // Update class
+            console.log(WINDOW_CONFIG.windows, WINDOW_CONFIG.codeWindow);   // ISSUE #13
+            WINDOW_CONFIG.windows.forEach((win, index) => {
+                console.log(win)
+                // Remove all classlist
+                win.parentElement.classList.remove(...win.parentElement.classList);
+                win.parentElement.classList.add(`w-${index}`);
+            });
         }
     }
 
